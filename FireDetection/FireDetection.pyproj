@@ -1,0 +1,179 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>e52d72b7-9652-4cf5-8c97-81f3040e33e0</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>train.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>FireDetection</Name>
+    <RootNamespace>FireDetection</RootNamespace>
+    <InterpreterId>MSBuild|env-prometheus-py35|C:\Users\facun\Projects\Prometheus\PrometheusWS\PrometheusWS.pyproj</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FasterRCNN\FasterRCNN_config.py" />
+    <Compile Include="FasterRCNN\FasterRCNN_eval.py" />
+    <Compile Include="FasterRCNN\FasterRCNN_train.py" />
+    <Compile Include="FasterRCNN\run_faster_rcnn.py" />
+    <Compile Include="FastRCNN\BrainScript\A1_GenerateInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\A2_RunWithBSModel.py" />
+    <Compile Include="FastRCNN\BrainScript\A2_RunWithPyModel.py" />
+    <Compile Include="FastRCNN\BrainScript\A3_ParseAndEvaluateOutput.py" />
+    <Compile Include="FastRCNN\BrainScript\B1_VisualizeInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\B2_EvaluateInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\B3_VisualizeOutputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\cntk_helpers.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\imdb.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\nms.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\pascal_voc.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\test.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\timer.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\train_svms.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\voc_eval.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\__init__.py" />
+    <Compile Include="FastRCNN\BrainScript\imdb_data.py" />
+    <Compile Include="FastRCNN\BrainScript\PARAMETERS.py" />
+    <Compile Include="FastRCNN\BrainScript\selectivesearch\selectivesearch.py" />
+    <Compile Include="FastRCNN\BrainScript\selectivesearch\__init__.py" />
+    <Compile Include="FastRCNN\BrainScript\__init__.py" />
+    <Compile Include="FastRCNN\FastRCNN_config.py" />
+    <Compile Include="FastRCNN\FastRCNN_eval.py" />
+    <Compile Include="FastRCNN\FastRCNN_train.py" />
+    <Compile Include="FastRCNN\install_data_and_model.py" />
+    <Compile Include="FastRCNN\run_fast_rcnn.py" />
+    <Compile Include="score.py" />
+    <Compile Include="train.py" />
+    <Compile Include="PretrainedModels\download_model.py" />
+    <Compile Include="utils\annotations\annotations_helper.py" />
+    <Compile Include="utils\caffe_layers\anchor_target_layer.py" />
+    <Compile Include="utils\caffe_layers\bbox_transform.py" />
+    <Compile Include="utils\caffe_layers\default_config.py" />
+    <Compile Include="utils\caffe_layers\proposal_layer.py" />
+    <Compile Include="utils\caffe_layers\proposal_target_layer.py" />
+    <Compile Include="utils\configs\AlexNet_config.py" />
+    <Compile Include="utils\configs\Prometheus_config.py" />
+    <Compile Include="utils\config_helpers.py" />
+    <Compile Include="utils\cython_modules\__init__.py" />
+    <Compile Include="utils\map_helpers.py" />
+    <Compile Include="utils\nms_wrapper.py" />
+    <Compile Include="utils\od_mb_source.py" />
+    <Compile Include="utils\od_reader.py" />
+    <Compile Include="utils\od_utils.py" />
+    <Compile Include="utils\plot_helpers.py" />
+    <Compile Include="utils\proposal_helpers.py" />
+    <Compile Include="utils\rpn\anchor_target_layer.py" />
+    <Compile Include="utils\rpn\bbox_transform.py" />
+    <Compile Include="utils\rpn\cntk_smoothL1_loss.py" />
+    <Compile Include="utils\rpn\generate_anchors.py" />
+    <Compile Include="utils\rpn\proposal_layer.py" />
+    <Compile Include="utils\rpn\proposal_target_layer.py" />
+    <Compile Include="utils\rpn\rpn_helpers.py" />
+    <Compile Include="utils\rpn\__init__.py" />
+    <Compile Include="utils\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataSets\" />
+    <Folder Include="DataSets\Fire\" />
+    <Folder Include="FasterRCNN\" />
+    <Folder Include="FastRCNN\" />
+    <Folder Include="FastRCNN\BrainScript\" />
+    <Folder Include="FastRCNN\BrainScript\fastRCNN\" />
+    <Folder Include="FastRCNN\BrainScript\fastRCNN\utils\" />
+    <Folder Include="FastRCNN\BrainScript\selectivesearch\" />
+    <Folder Include="PretrainedModels\" />
+    <Folder Include="utils\" />
+    <Folder Include="utils\annotations\" />
+    <Folder Include="utils\annotations\__pycache__\" />
+    <Folder Include="utils\caffe_layers\" />
+    <Folder Include="utils\configs\" />
+    <Folder Include="utils\configs\__pycache__\" />
+    <Folder Include="utils\cython_modules\" />
+    <Folder Include="utils\cython_modules\__pycache__\" />
+    <Folder Include="utils\rpn\" />
+    <Folder Include="utils\rpn\__pycache__\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataSets\Fire\class_map.txt" />
+    <Content Include="DataSets\Fire\test_img_file.txt" />
+    <Content Include="DataSets\Fire\test_roi_file.txt" />
+    <Content Include="DataSets\Fire\train_img_file.txt" />
+    <Content Include="DataSets\Fire\train_roi_file.txt" />
+    <Content Include="FastRCNN\BrainScript\CNTK_FastRCNN_Eval.ipynb" />
+    <Content Include="FastRCNN\BrainScript\fastrcnn.cntk" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cp35-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cp36-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cp35-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cp36-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\README.md" />
+    <Content Include="FastRCNN\BrainScript\requirements.txt" />
+    <Content Include="FastRCNN\BrainScript\selectivesearch\README.md" />
+    <Content Include="FastRCNN\README.md" />
+    <Content Include="PretrainedModels\Image.md" />
+    <Content Include="PretrainedModels\README.md" />
+    <Content Include="utils\annotations\__pycache__\annotations_helper.cpython-36.pyc" />
+    <Content Include="utils\configs\__pycache__\AlexNet_config.cpython-36.pyc" />
+    <Content Include="utils\configs\__pycache__\Prometeo_config.cpython-36.pyc" />
+    <Content Include="utils\cython_modules\bbox.c" />
+    <Content Include="utils\cython_modules\bbox.pyx" />
+    <Content Include="utils\cython_modules\cpu_nms.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.cp36-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-34m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-35m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-36m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.pyx" />
+    <Content Include="utils\cython_modules\cython_bbox.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cython_bbox.cp36-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-34m.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-35m.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-36m.so" />
+    <Content Include="utils\cython_modules\gpu_nms.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\gpu_nms.cu" />
+    <Content Include="utils\cython_modules\gpu_nms.hpp" />
+    <Content Include="utils\cython_modules\gpu_nms.pyd" />
+    <Content Include="utils\cython_modules\gpu_nms.pyx" />
+    <Content Include="utils\cython_modules\nms_kernel.cu" />
+    <Content Include="utils\cython_modules\__pycache__\__init__.cpython-36.pyc" />
+    <Content Include="utils\Readme.md" />
+    <Content Include="utils\rpn\__pycache__\anchor_target_layer.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\bbox_transform.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\cntk_smoothL1_loss.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\generate_anchors.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\proposal_layer.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\proposal_target_layer.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\rpn_helpers.cpython-36.pyc" />
+    <Content Include="utils\rpn\__pycache__\__init__.cpython-36.pyc" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="MSBuild|env-prometheus-py35|C:\Users\facun\Projects\Prometheus\PrometheusWS\PrometheusWS.pyproj" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

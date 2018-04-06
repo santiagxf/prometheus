@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FireDetection", "FireDetection\FireDetection.pyproj", "{E52D72B7-9652-4CF5-8C97-81F3040E33E0}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PrometheusWS", "PrometheusWS\PrometheusWS.pyproj", "{FD9A303D-44D2-4673-BE54-04BF85D647AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometeo.Planner.Console", "Prometeo.Planner.Console\Prometeo.Planner.Console.csproj", "{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E52D72B7-9652-4CF5-8C97-81F3040E33E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E52D72B7-9652-4CF5-8C97-81F3040E33E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9A303D-44D2-4673-BE54-04BF85D647AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9A303D-44D2-4673-BE54-04BF85D647AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9A303D-44D2-4673-BE54-04BF85D647AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9A303D-44D2-4673-BE54-04BF85D647AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4434E38-3CE9-4A28-A193-3422450F4BCA}
+	EndGlobalSection
+EndGlobal
