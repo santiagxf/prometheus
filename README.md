@@ -14,7 +14,7 @@
 <p>
     <ul>
         <li><b>Cognitive ToolKit (CNTK):</b> A machine running CNTK 2.5 with GPU support. GPU can be deativated using configuration files.</li>
-        <li><b>Python:</b> 3.5.4</li>
+        <li><b>Python:</b> 3.5.4. The file PrometheusWS\requirements.txt contains all the packages that have to be present in the Python Environment</li>
         <li><b>CUDA:</b> If GPU is used, then CUDA 9.X+ should be installed</li>
         <li><b>Intel Math library:</b>Follow instructions on Microsoft CNTK installation for further details.</li>
         <li><b>.NET Framework:</b> 4.5. Visual Studio is required to compile the WPF application.</li>
