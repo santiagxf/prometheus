@@ -4,64 +4,68 @@
 # for full license information.
 # ==============================================================================
 
-import os, sys
-import numpy as np
+import os, sys, io, json
+import datetime as dt
+import pandas as pd
+from utils.imageTools import imageToBase64, base64ToImage
+from utils.config_helpers import merge_configs
 import utils.od_utils as od
 from cntk import load_model
-from utils.config_helpers import merge_configs
 
-detector_name = 'FasterRCNN'
+def run(input_df):
+    print(str(input_df))
+    
+    startTime = dt.datetime.now()
 
-def get_configuration(detector_name):
-    from FasterRCNN.FasterRCNN_config import cfg as detector_cfg
+    # convert input back to image and save to disk
+    base64ImgString = input_df['image base64 string'][0]
+    imgPath = base64ToImage(base64ImgString, workingDir)
 
-    # for AlexNet base model use:       from utils.configs.AlexNet_config import cfg as network_cfg
-    from utils.configs.AlexNet_config import cfg as network_cfg
-    # for the Grocery data set use:     from utils.configs.Prometheus_config import cfg as dataset_cfg
-    from utils.configs.Prometheus_config import cfg as dataset_cfg
-
-    return merge_configs([detector_cfg, network_cfg, dataset_cfg, {'DETECTOR': detector_name}])
-
-if __name__ == '__main__':
-    cfg = get_configuration(detector_name)
-    modelPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"PretrainedModels\prometheus.model");
+    # load configuration
+    cfg = loadConfiguration(detectorName)
 
     # load model
-    od.prepareOnly_object_detector(cfg);
-    print('Loading model from', modelPath)
-    eval_model = load_model(modelPath)
+    # od.prepareOnly_object_detector(cfg)
+    eval_model = load_model(os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./prometheus.dnn"))
 
-    # detect objects in single image
-    img_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DataSets", "Fire", "positive", "1010_nws_ocr-l-ahfire-032.jpg")
-    print('Testing image', img_path)
-    regressed_rois, cls_probs = od.evaluate_single_image(eval_model, img_path, cfg)
+    # score image
+    regressed_rois, cls_probs = od.evaluate_single_image(eval_model, imgPath, cfg)
     bboxes, labels, scores = od.filter_results(regressed_rois, cls_probs, cfg)
 
-    # write detection results to output
-    fg_boxes = np.where(labels > 0)
-    print("#bboxes: before nms: {}, after nms: {}, foreground: {}".format(len(regressed_rois), len(bboxes), len(fg_boxes[0])))
-    for i in fg_boxes[0]: print("{:<12} (label: {:<2}), score: {:.3f}, box: {}".format(
-                                cfg["DATA"].CLASSES[labels[i]], labels[i], scores[i], [int(v) for v in bboxes[i]]))
+    return toJson(bboxes, labels, scores)
 
-    # visualize detections on image
-    od.visualize_results(img_path, bboxes, labels, scores, cfg)
 
-    # measure inference time
-    od.measure_inference_time(eval_model, img_path, cfg, num_repetitions=100)
+def init():
+    try:
+        print("Executing init() method...")
+        print("Python version: " + str(sys.version) + ", CNTK version: " + cntk.__version__)
+    except Exception as e:
+        print("Exception in init:")
+        print(str(e))
 
-     # detect objects in single image
-    img_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./DataSets/Fire/negative/videoblocks-beginning-of-a-forest-fire-uhd_buoxnjgpb__WL_frame_27.jpg")
-    regressed_rois, cls_probs = od.evaluate_single_image(eval_model, img_path, cfg)
-    bboxes, labels, scores = od.filter_results(regressed_rois, cls_probs, cfg)
+def main():
+    from azureml.api.schema.dataTypes import DataTypes
+    from azureml.api.schema.sampleDefinition import SampleDefinition
+    from azureml.api.realtime.services import generate_schema
 
-    # write detection results to output
-    fg_boxes = np.where(labels > 0)
-    print("#bboxes: before nms: {}, after nms: {}, foreground: {}".format(len(regressed_rois), len(bboxes), len(fg_boxes[0])))
-    for i in fg_boxes[0]: print("{:<12} (label: {:<2}), score: {:.3f}, box: {}".format(
-                                cfg["DATA"].CLASSES[labels[i]], labels[i], scores[i], [int(v) for v in bboxes[i]]))
+    demoimage = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./uploadedImg.jpg")
+    base64ImgString = imageToBase64(demoimage)
+    df = pd.DataFrame(data=[[base64ImgString]], columns=['image base64 string'])
+    
+    # Turn on data collection debug mode to view output in stdout
+    os.environ["AML_MODEL_DC_DEBUG"] = 'true'
 
-    # visualize detections on image
-    od.visualize_results(img_path, bboxes, labels, scores, cfg)
+    # Call init() and run() function
+    init()
+    inputs = {"input_df": SampleDefinition(DataTypes.PANDAS, df)}
 
-    # measure inference time
-    od.measure_inference_time(eval_model, img_path, cfg, num_repetitions=100)
+    results = run(df)
+    print("resultString = " + str(results))
+
+    # Genereate the schema
+    generate_schema(run_func=run, inputs=inputs, filepath='.\schema.json')
+    print("Schema generated.")
+
+
+if __name__ == "__main__":
+    main()

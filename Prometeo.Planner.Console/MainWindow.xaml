@@ -37,7 +37,7 @@
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
         <Border Background="WhiteSmoke" DockPanel.Dock="Top">
-            <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Margin="0,0,0,0" MinHeight="600" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" Center="-36.7597999,-62.955101013" ZoomLevel="17" />
+            <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Margin="0,0,0,0" MinHeight="600" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="2" />
         </Border>
     </DockPanel>
 </Fluent:RibbonWindow>

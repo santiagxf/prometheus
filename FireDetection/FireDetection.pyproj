@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>FireDetection</Name>
     <RootNamespace>FireDetection</RootNamespace>
-    <InterpreterId>MSBuild|env-prometheus-py35|C:\Users\facun\Projects\Prometheus\PrometheusWS\PrometheusWS.pyproj</InterpreterId>
+    <InterpreterId>Global|VisualStudio|cntk-py35</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -66,6 +66,7 @@
     <Compile Include="utils\configs\Prometheus_config.py" />
     <Compile Include="utils\config_helpers.py" />
     <Compile Include="utils\cython_modules\__init__.py" />
+    <Compile Include="utils\imageTools.py" />
     <Compile Include="utils\map_helpers.py" />
     <Compile Include="utils\nms_wrapper.py" />
     <Compile Include="utils\od_mb_source.py" />
@@ -124,8 +125,8 @@
     <Content Include="FastRCNN\BrainScript\requirements.txt" />
     <Content Include="FastRCNN\BrainScript\selectivesearch\README.md" />
     <Content Include="FastRCNN\README.md" />
-    <Content Include="PretrainedModels\Image.md" />
-    <Content Include="PretrainedModels\README.md" />
+    <Content Include="PretrainedModels\AlexNet_ImageNet_Caffe.model" />
+    <Content Include="PretrainedModels\prometheus.dnn" />
     <Content Include="utils\annotations\__pycache__\annotations_helper.cpython-36.pyc" />
     <Content Include="utils\configs\__pycache__\AlexNet_config.cpython-36.pyc" />
     <Content Include="utils\configs\__pycache__\Prometeo_config.cpython-36.pyc" />
@@ -165,7 +166,7 @@
     <Content Include="utils\rpn\__pycache__\__init__.cpython-36.pyc" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="MSBuild|env-prometheus-py35|C:\Users\facun\Projects\Prometheus\PrometheusWS\PrometheusWS.pyproj" />
+    <InterpreterReference Include="Global|VisualStudio|cntk-py35" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

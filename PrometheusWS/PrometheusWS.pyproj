@@ -17,7 +17,7 @@
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>PrometheusWS</Name>
     <RootNamespace>PrometheusWS</RootNamespace>
-    <InterpreterId>MSBuild|env-prometheus-py35|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|VisualStudio|cntk-py35</InterpreterId>
     <WebBrowserPort>55555</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -61,7 +61,6 @@
     <Compile Include="FastRCNN\run_fast_rcnn.py" />
     <Compile Include="PretrainedModels\download_model.py" />
     <Compile Include="PrometheusWS\scoringService.py" />
-    <Compile Include="train.py" />
     <Compile Include="utils\annotations\annotations_helper.py" />
     <Compile Include="utils\annotations\C1_DrawBboxesOnImages.py" />
     <Compile Include="utils\annotations\C2_AssignLabelsToBboxes.py" />
@@ -161,7 +160,6 @@
     <Content Include="PretrainedModels\Image.md" />
     <Content Include="PretrainedModels\prometheus.dnn2" />
     <Content Include="PretrainedModels\README.md" />
-    <Content Include="PrometheusWS\imgUploaded.jpg" />
     <Content Include="utils\Libs\mklml-2018.0.1\include\i_malloc.h" />
     <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_blas.h" />
     <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_cblas.h" />
@@ -233,21 +231,11 @@
     <Content Include="PrometheusWS\static\scripts\respond.js" />
     <Content Include="PrometheusWS\static\scripts\respond.min.js" />
     <Content Include="PrometheusWS\static\scripts\_references.js" />
-    <Content Include="PrometheusWS\templates\about.html" />
-    <Content Include="PrometheusWS\templates\contact.html" />
     <Content Include="PrometheusWS\templates\index.html" />
     <Content Include="PrometheusWS\templates\layout.html" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env-prometheus-py35\">
-      <Id>env-prometheus-py35</Id>
-      <Version>3.5</Version>
-      <Description>env-prometheus-py35 (cntk-py35)</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
+    <InterpreterReference Include="Global|VisualStudio|cntk-py35" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

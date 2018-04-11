@@ -26,10 +26,9 @@ def home():
 def contact():
     """Renders the contact page."""
     return render_template(
-        'contact.html',
-        title='Contact',
+        'index.html',
+        title=title,
         year=datetime.now().year,
-        message='Your contact page.'
     )
 
 @app.route('/about')
@@ -55,7 +54,8 @@ def score():
 
             return results;
     else:
-        f_name = 'imgUploaded.jpg'
-        fullpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), f_name)
-        results = PrometheusWS.scoringService.run(fullpath)
-        return results
+        return render_template(
+            'index.html',
+            title=title,
+            year=datetime.now().year,
+        )
