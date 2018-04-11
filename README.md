@@ -6,6 +6,34 @@
 </p>
 
 <h2>
+    Instalation instructions
+</h2>
+<h3>
+    Prerequisites
+</h3>
+<p>
+    <ul>
+        <li><b>Cognitive ToolKit (CNTK):</b> A machine running CNTK 2.5 with GPU support. GPU can be deativated using configuration files.</li>
+        <li><b>Python:</b> 3.5.4</li>
+        <li><b>CUDA:</b> If GPU is used, then CUDA 9.X+ should be installed</li>
+        <li><b>Intel Math library:</b>Follow instructions on Microsoft CNTK installation for further details.</li>
+        <li><b>.NET Framework:</b> 4.5. Visual Studio is required to compile the WPF application.</li>
+        <li><b>Azure Workbench: </b>Optional.</li>
+    </ul>
+</p>
+<h3>
+    Installation
+</h3>
+<p>
+    <ol>
+        <li><b>Download the solution and build:</b> Download the solution and build it. Ensure that the project PrometheusWS is using Python environment with support for CNTK.</li>
+        <li><b>Configure the service:</b> Open the file Prometeo.Planner.Console\App.config and point the configuration key prometheusWebServiceUrl to your hosting URL. By default we are running on http://localhost:55555/. The endpoint for scoring images is /score</li>
+        <li><b>Run the service:</b>Run the service and make it available.</li>
+        <li><b>Run the Windows App: </b>Run the WPF application you compiled.</li>
+    </ol>
+</p>
+
+<h2>
 Technologies
 </h2>
 <p>
