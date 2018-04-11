@@ -13,11 +13,11 @@
 </h3>
 <p>
     <ul>
-        <li><b>Cognitive ToolKit (CNTK):</b> A machine running CNTK 2.5 with GPU support. GPU can be deativated using configuration files.</li>
+        <li><b>Cognitive ToolKit (CNTK):</b> A machine running CNTK 2.5 with GPU support. GPU can be deativated using configuration files, however is on by default on the given configuration. Follow the steps on https://docs.microsoft.com/en-us/cognitive-toolkit/setup-cntk-on-your-machine to get your environment correctly working.</li>
         <li><b>Python:</b> 3.5.4. The file PrometheusWS\requirements.txt contains all the packages that have to be present in the Python Environment</li>
         <li><b>CUDA:</b> If GPU is used, then CUDA 9.X+ should be installed</li>
-        <li><b>Intel Math library:</b>Follow instructions on Microsoft CNTK installation for further details.</li>
-        <li><b>.NET Framework:</b> 4.5. Visual Studio is required to compile the WPF application.</li>
+        <li><b>Intel Math library:</b>Follow instructions on Microsoft CNTK installation to install the library.</li>
+        <li><b>.NET Framework:</b> 4.5. Visual Studio is required to compile the WPF application. All required packages are included in Packages folder.</li>
         <li><b>Azure Workbench: </b>Optional.</li>
     </ul>
 </p>
@@ -26,10 +26,11 @@
 </h3>
 <p>
     <ol>
+        <li><b>Create a CNTK environment with Python 4.5: </b>Ensure you have successfully installed a CNTK environment in your machine.</li>
         <li><b>Download the solution and build:</b> Download the solution and build it. Ensure that the project PrometheusWS is using Python environment with support for CNTK.</li>
         <li><b>Configure the service:</b> Open the file Prometeo.Planner.Console\App.config and point the configuration key prometheusWebServiceUrl to your hosting URL. By default we are running on http://localhost:55555/. The endpoint for scoring images is /score</li>
-        <li><b>Run the service:</b>Run the service and make it available.</li>
-        <li><b>Run the Windows App: </b>Run the WPF application you compiled.</li>
+        <li><b>Run the service:</b>Run the service and make it available. You can use Visual Studio, Debug, Start new instance.</li>
+        <li><b>Run the Windows App: </b>Run the WPF application you compiled or use Visual Studio, Debug, Start new instance.</li>
     </ol>
 </p>
 
