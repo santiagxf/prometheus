@@ -39,9 +39,8 @@ namespace Prometeo.Planner.Console
         public string FilePath { get; set; }
         BackgroundWorker _worker;
         string _serviceUrl;
-
-
         public Collection<LocationMark> DetectedFires { get; set; }
+        public GeoCoordinateCollection CoveredArea { get; set; }
 
         public AnalyzeImages()
         {
@@ -49,6 +48,7 @@ namespace Prometeo.Planner.Console
 
             ServiceRunning = true;
             DetectedFires = new Collection<LocationMark>();
+            CoveredArea = new GeoCoordinateCollection();
 
             _serviceUrl = ConfigurationManager.AppSettings["prometheusWebServiceUrl"].ToString();
             _worker = new BackgroundWorker()
@@ -86,11 +86,18 @@ namespace Prometeo.Planner.Console
 
                     var result = scoreSingleImage(file);
                     var fires = result.labels.Where((l) => l == 1);
+                    var imageLocation = BingMapsRestServices.GetLatLongFromImage(file);
+                    if (imageLocation == null)
+                        imageLocation = new double[] { 0, 0 };
+                    else
+                        CoveredArea.Add(new LocationMark()
+                        {
+                            Latitude = imageLocation[0],
+                            Longitude = imageLocation[1]
+                        });
+
                     if (fires.Count() > 0)
                     {
-                        var imageLocation = BingMapsRestServices.GetLatLongFromImage(file);
-                        if (imageLocation == null)
-                            imageLocation = new double[] { 0, 0 };
                         DetectedFires.Add(new LocationMark(imageLocation[0], imageLocation[1], file, filterResults(result)));
                     }
                 }

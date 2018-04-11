@@ -33,9 +33,12 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdCleanMap { get; set; }
         public ApplicationCommand CmdAnalizeNow { get; set; }
         public ApplicationCommand CmdMoveMap { get; set; }
+        public ApplicationCommand CmdNotificationOpened { get; set; }
 
         public MapModel MapModel { get; set; }
         public bool DrawingRequested { get; set; }
+        public Visibility FireAlert { get; set; }
+        public Visibility AreaIsGood { get; set; }
 
         public MainWindow()
         {
@@ -47,11 +50,20 @@ namespace Prometeo.Planner.Console
             CmdCleanMap = new ApplicationCommand(CmdCleanMap_Execute);
             CmdAnalizeNow = new ApplicationCommand(CmdAnalizeNow_Execute);
             CmdMoveMap = new ApplicationCommand(CmdMoveMap_Execute);
+            CmdNotificationOpened = new ApplicationCommand(CmdNotificationOpened_Execute);
 
             MapModel = new MapModel(BmpPlanner);
             MapModel.Shading = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
             MapModel.Stroke = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
             MapModel.StrokeThickness = 2;
+
+            FireAlert = Visibility.Collapsed;
+            AreaIsGood = Visibility.Collapsed;
+        }
+
+        private void CmdNotificationOpened_Execute(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void CmdMoveMap_Execute(object obj)
@@ -88,6 +100,18 @@ namespace Prometeo.Planner.Console
                         }
                     }
                 }
+
+                var allCoveredArea = wdw.CoveredArea.ConvexHull();
+                if (allCoveredArea != null && allCoveredArea.Count > 2)
+                {
+                    MapModel.StartNewPolygon();
+
+                    foreach (var point in allCoveredArea)
+                        MapModel.AddPointToPolygon(point);
+
+                    MapModel.FinishCurrentPolygon();
+                }
+
 
                 foreach (var loc in wdw.DetectedFires)
                     MapModel.Marks.Add(loc);
@@ -139,6 +163,18 @@ namespace Prometeo.Planner.Console
             {
                 var centerPoint = MapModel.Marks.First();
                 BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), 8);
+
+                FireAlert = Visibility.Visible;
+                AreaIsGood = Visibility.Collapsed;
+                NotifyPropertyChanged("AreaIsGood");
+                NotifyPropertyChanged("FireAlert");
+            }
+            else
+            {
+                AreaIsGood = Visibility.Collapsed;
+                FireAlert = Visibility.Visible;
+                NotifyPropertyChanged("AreaIsGood");
+                NotifyPropertyChanged("FireAlert");
             }
         }
 

@@ -66,6 +66,14 @@ namespace Prometeo.Planner.Console.Map
             _currentDraftLoc = null;
         }
 
+        public void AddPointToPolygon(Location location)
+        {
+            if (!IsCurrentlyDraftLocation)
+                _currentDrawingActivity.Locations.Add(location);
+
+            _currentDraftLoc = null;
+        }
+
         public void FinishCurrentPolygon()
         {
             if (IsCurrentlyDraftLocation)

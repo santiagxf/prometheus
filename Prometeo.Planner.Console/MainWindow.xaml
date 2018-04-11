@@ -8,11 +8,12 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:BingMaps="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d" WindowState="Maximized"
-        Title="Prometeo: ImagineCup" d:DesignHeight="600" Width="800">
+        Title="Prometheus: ImagineCup 2018" d:DesignHeight="600" Width="800">
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CmdEndPolygonDrawing }" />
     </Window.InputBindings>
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        
         <Fluent:Ribbon x:Name="rbMainUI" VerticalAlignment="Top" DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage Header="Prometheus" Width="85">
@@ -36,8 +37,23 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
+        <StackPanel DockPanel.Dock="Top">
+            <StackPanel.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding CmdNotificationOpened}" />
+            </StackPanel.InputBindings>
+            <Border Visibility="{Binding AreaIsGood}" Background="#FF95D889" BorderBrush="#FF549D47" BorderThickness="1" Padding="10,2">
+                <Grid>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The flight data doesn't contain any hit of a fire being developed. Check the map to see the area covered in the flight." /></TextBlock>
+                </Grid>
+            </Border>
+            <Border Visibility="{Binding FireAlert }" Background="IndianRed" BorderBrush="DarkRed" BorderThickness="1" Padding="10,2">
+                <Grid>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="We detected potencial fires under development in the are. Map has been moved to the first location with a fire detected. Explore the area." /></TextBlock>
+                </Grid>
+            </Border>
+        </StackPanel>
         <Border Background="WhiteSmoke" DockPanel.Dock="Top">
-            <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Margin="0,0,0,0" MinHeight="600" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="2" />
+            <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Margin="0,0,0,0" MinHeight="600" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="3" />
         </Border>
     </DockPanel>
 </Fluent:RibbonWindow>
