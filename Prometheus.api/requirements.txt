@@ -1,0 +1,8 @@
+easydict==1.7
+Flask==0.12.2
+Pillow==5.1.0
+PyYAML==3.12
+scipy==1.0.1
+setuptools==20.10.1
+pandas
+numpy

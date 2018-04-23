@@ -1,0 +1,3 @@
+{
+    "python.pythonPath": "${workspaceFolder}\\env-prometheus-py35\\Scripts\\python.exe"
+}

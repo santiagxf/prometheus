@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>fd9a303d-44d2-4673-be54-04bf85d647aa</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <ProjectTypeGuids>{789894c7-04a9-4a11-a6b5-3f4435165112};{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>runserver.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <LaunchProvider>Web launcher</LaunchProvider>
+    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <OutputPath>.</OutputPath>
+    <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
+    <Name>Prometheus.api</Name>
+    <RootNamespace>Prometheus.api</RootNamespace>
+    <InterpreterId>Global|VisualStudio|cntk-py35</InterpreterId>
+    <WebBrowserPort>55555</WebBrowserPort>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FasterRCNN\FasterRCNN_config.py" />
+    <Compile Include="FasterRCNN\FasterRCNN_eval.py" />
+    <Compile Include="FasterRCNN\FasterRCNN_train.py" />
+    <Compile Include="FasterRCNN\run_faster_rcnn.py" />
+    <Compile Include="FastRCNN\BrainScript\A1_GenerateInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\A2_RunWithBSModel.py" />
+    <Compile Include="FastRCNN\BrainScript\A2_RunWithPyModel.py" />
+    <Compile Include="FastRCNN\BrainScript\A3_ParseAndEvaluateOutput.py" />
+    <Compile Include="FastRCNN\BrainScript\B1_VisualizeInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\B2_EvaluateInputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\B3_VisualizeOutputROIs.py" />
+    <Compile Include="FastRCNN\BrainScript\cntk_helpers.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\imdb.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\nms.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\pascal_voc.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\test.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\timer.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\train_svms.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\voc_eval.py" />
+    <Compile Include="FastRCNN\BrainScript\fastRCNN\__init__.py" />
+    <Compile Include="FastRCNN\BrainScript\imdb_data.py" />
+    <Compile Include="FastRCNN\BrainScript\PARAMETERS.py" />
+    <Compile Include="FastRCNN\BrainScript\selectivesearch\selectivesearch.py" />
+    <Compile Include="FastRCNN\BrainScript\selectivesearch\__init__.py" />
+    <Compile Include="FastRCNN\BrainScript\__init__.py" />
+    <Compile Include="FastRCNN\FastRCNN_config.py" />
+    <Compile Include="FastRCNN\FastRCNN_eval.py" />
+    <Compile Include="FastRCNN\FastRCNN_train.py" />
+    <Compile Include="FastRCNN\install_data_and_model.py" />
+    <Compile Include="FastRCNN\run_fast_rcnn.py" />
+    <Compile Include="PretrainedModels\download_model.py" />
+    <Compile Include="utils\annotations\annotations_helper.py" />
+    <Compile Include="utils\annotations\C1_DrawBboxesOnImages.py" />
+    <Compile Include="utils\annotations\C2_AssignLabelsToBboxes.py" />
+    <Compile Include="utils\annotations\LabelMeConverter.py" />
+    <Compile Include="utils\caffe_layers\anchor_target_layer.py" />
+    <Compile Include="utils\caffe_layers\bbox_transform.py" />
+    <Compile Include="utils\caffe_layers\default_config.py" />
+    <Compile Include="utils\caffe_layers\proposal_layer.py" />
+    <Compile Include="utils\caffe_layers\proposal_target_layer.py" />
+    <Compile Include="utils\configs\AlexNet_config.py" />
+    <Compile Include="utils\configs\Prometheus_config.py" />
+    <Compile Include="utils\config_helpers.py" />
+    <Compile Include="utils\cython_modules\__init__.py" />
+    <Compile Include="utils\imageTools.py" />
+    <Compile Include="utils\map_helpers.py" />
+    <Compile Include="utils\nms_wrapper.py" />
+    <Compile Include="utils\od_mb_source.py" />
+    <Compile Include="utils\od_reader.py" />
+    <Compile Include="utils\od_utils.py" />
+    <Compile Include="utils\plot_helpers.py" />
+    <Compile Include="utils\proposal_helpers.py" />
+    <Compile Include="utils\rpn\anchor_target_layer.py" />
+    <Compile Include="utils\rpn\bbox_transform.py" />
+    <Compile Include="utils\rpn\cntk_smoothL1_loss.py" />
+    <Compile Include="utils\rpn\generate_anchors.py" />
+    <Compile Include="utils\rpn\proposal_layer.py" />
+    <Compile Include="utils\rpn\proposal_target_layer.py" />
+    <Compile Include="utils\rpn\rpn_helpers.py" />
+    <Compile Include="utils\rpn\__init__.py" />
+    <Compile Include="utils\__init__.py" />
+    <Compile Include="runserver.py" />
+    <Compile Include="Api\views.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Api\" />
+    <Folder Include="Api\static\" />
+    <Folder Include="Api\static\content\" />
+    <Folder Include="Api\static\fonts\" />
+    <Folder Include="Api\static\scripts\" />
+    <Folder Include="Api\templates\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\DataSets\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\DataSets\Fire\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FasterRCNN\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FastRCNN\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FastRCNN\BrainScript\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FastRCNN\BrainScript\fastRCNN\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FastRCNN\BrainScript\fastRCNN\utils\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\FastRCNN\BrainScript\selectivesearch\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\PretrainedModels\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\annotations\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\caffe_layers\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\configs\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\cython_modules\" />
+    <Folder Include="C:\Users\facun\Projects\prometheus\Prometheus.api\utils\rpn\" />
+    <Folder Include="DataSets\" />
+    <Folder Include="DataSets\Fire\" />
+    <Folder Include="FasterRCNN\" />
+    <Folder Include="FastRCNN\" />
+    <Folder Include="FastRCNN\BrainScript\" />
+    <Folder Include="FastRCNN\BrainScript\fastRCNN\" />
+    <Folder Include="FastRCNN\BrainScript\fastRCNN\utils\" />
+    <Folder Include="FastRCNN\BrainScript\selectivesearch\" />
+    <Folder Include="PretrainedModels\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\static\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\static\content\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\static\fonts\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\static\scripts\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\Api\templates\" />
+    <Folder Include="utils\" />
+    <Folder Include="utils\annotations\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\utils\Libs\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\utils\Libs\mklml-2018.0.1\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\utils\Libs\mklml-2018.0.1\include\" />
+    <Folder Include="C:\Users\facun\Projects\Prometheus\Prometheus.api\utils\Libs\mklml-2018.0.1\lib\" />
+    <Folder Include="utils\caffe_layers\" />
+    <Folder Include="utils\configs\" />
+    <Folder Include="utils\cython_modules\" />
+    <Folder Include="utils\Libs\" />
+    <Folder Include="utils\Libs\mklml-2018.0.1\" />
+    <Folder Include="utils\Libs\mklml-2018.0.1\include\" />
+    <Folder Include="utils\Libs\mklml-2018.0.1\lib\" />
+    <Folder Include="utils\rpn\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataSets\Fire\class_map.txt" />
+    <Content Include="FastRCNN\BrainScript\CNTK_FastRCNN_Eval.ipynb" />
+    <Content Include="FastRCNN\BrainScript\fastrcnn.cntk" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cp35-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cp36-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_bbox.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cp35-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cp36-win_amd64.pyd" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\fastRCNN\utils\cython_nms.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="FastRCNN\BrainScript\README.md" />
+    <Content Include="FastRCNN\BrainScript\requirements.txt" />
+    <Content Include="FastRCNN\BrainScript\selectivesearch\README.md" />
+    <Content Include="FastRCNN\README.md" />
+    <Content Include="PretrainedModels\Image.md" />
+    <Content Include="PretrainedModels\prometheus.dnn2" />
+    <Content Include="PretrainedModels\README.md" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\i_malloc.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_blas.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_cblas.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_dnn.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_dnn_types.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_lapack.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_lapacke.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_service.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_trans.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_types.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_version.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vml.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vml_defines.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vml_functions.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vml_types.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vsl.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vsl_defines.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vsl_functions.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\include\mkl_vsl_types.h" />
+    <Content Include="utils\Libs\mklml-2018.0.1\license.txt" />
+    <Content Include="utils\cython_modules\bbox.c" />
+    <Content Include="utils\cython_modules\bbox.pyx" />
+    <Content Include="utils\cython_modules\cpu_nms.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.cp36-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-34m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-35m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cpu_nms.cpython-36m.so" />
+    <Content Include="utils\cython_modules\cpu_nms.pyd" />
+    <Content Include="utils\cython_modules\cpu_nms.pyx" />
+    <Content Include="utils\cython_modules\cython_bbox.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cython_bbox.cp36-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-34m.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-35m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-35m.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-36m-x86_64-linux-gnu.so" />
+    <Content Include="utils\cython_modules\cython_bbox.cpython-36m.so" />
+    <Content Include="utils\cython_modules\gpu_nms.cp35-win_amd64.pyd" />
+    <Content Include="utils\cython_modules\gpu_nms.cu" />
+    <Content Include="utils\cython_modules\gpu_nms.hpp" />
+    <Content Include="utils\cython_modules\gpu_nms.pyd" />
+    <Content Include="utils\cython_modules\gpu_nms.pyx" />
+    <Content Include="utils\cython_modules\nms_kernel.cu" />
+    <Content Include="utils\Readme.md" />
+    <Content Include="Api\web.config" />
+    <Content Include="web.config" />
+    <None Include="prometheus-app - Web Deploy.pubxml" />
+    <Content Include="requirements.txt" />
+    <Content Include="Api\static\content\bootstrap.css" />
+    <Content Include="Api\static\content\bootstrap.min.css" />
+    <Content Include="Api\static\content\site.css" />
+    <Content Include="Api\static\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Api\static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Api\static\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Api\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Api\static\scripts\bootstrap.js" />
+    <Content Include="Api\static\scripts\bootstrap.min.js" />
+    <Content Include="Api\static\scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Api\static\scripts\jquery-1.10.2.js" />
+    <Content Include="Api\static\scripts\jquery-1.10.2.min.js" />
+    <Content Include="Api\static\scripts\jquery-1.10.2.min.map" />
+    <Content Include="Api\static\scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Api\static\scripts\jquery.validate.js" />
+    <Content Include="Api\static\scripts\jquery.validate.min.js" />
+    <Content Include="Api\static\scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Api\static\scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Api\static\scripts\modernizr-2.6.2.js" />
+    <Content Include="Api\static\scripts\respond.js" />
+    <Content Include="Api\static\scripts\respond.min.js" />
+    <Content Include="Api\static\scripts\_references.js" />
+    <Content Include="Api\templates\index.html" />
+    <Content Include="Api\templates\layout.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|VisualStudio|cntk-py35" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

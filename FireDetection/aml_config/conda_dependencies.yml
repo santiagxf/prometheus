@@ -41,5 +41,6 @@ dependencies:
     - pandas
 
     # https://cntk.ai/PythonWheel/GPU/cntk_gpu-2.5-cp35-cp35m-win_amd64.whl
+    # https://santiagxf.blob.core.windows.net/python/opencv_python-3.4.0.12-cp35-cp35m-manylinux1_x86_64.whl
     # https://santiagxf.blob.core.windows.net/python/opencv_python-3.4.1-cp35-cp35m-win_amd64.whl
     - https://cntk.ai/PythonWheel/CPU-Only/cntk-2.5-cp35-cp35m-linux_x86_64.whl
