@@ -162,7 +162,7 @@ namespace Prometeo.Planner.Console
             if (MapModel.Marks.Any())
             {
                 var centerPoint = MapModel.Marks.First();
-                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), 8);
+                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), 14);
 
                 FireAlert = Visibility.Visible;
                 AreaIsGood = Visibility.Collapsed;

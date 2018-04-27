@@ -12,7 +12,7 @@
         </Label>
         <Button Command="{Binding CmdCancel}" Content="Cancel" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,23,19" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Label Margin="10,44,0,0" Content="This may take a while" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <ProgressBar HorizontalAlignment="Left" Height="21" Margin="10,85,0,0" VerticalAlignment="Top" Width="476" IsIndeterminate="True"/>
+        <ProgressBar Height="21" Margin="15,85,23,0" VerticalAlignment="Top" Value="{Binding CurrentProgress}" />
         <Label Margin="10,106,0,0" Content="{Binding CurrentStatus}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </Window>

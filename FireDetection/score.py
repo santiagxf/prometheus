@@ -12,6 +12,25 @@ from utils.config_helpers import merge_configs
 import utils.od_utils as od
 from cntk import load_model
 
+detectorName = 'FasterRCNN'
+pretrainnedModelName = r'./PretrainedModels/prometheus.dnn'
+workingDir = os.path.dirname(os.path.abspath(__file__))
+
+def getConfiguration(detector_name):
+    # load configs for detector, base network and data set
+    if detector_name == "FastRCNN":
+        from FastRCNN.FastRCNN_config import cfg as detector_cfg
+    elif detector_name == "FasterRCNN":
+        from FasterRCNN.FasterRCNN_config import cfg as detector_cfg
+    else:
+        print('Unknown detector: {}'.format(detector_name))
+
+    from utils.configs.AlexNet_config import cfg as network_cfg
+    from utils.configs.Prometheus_config import cfg as dataset_cfg
+
+    return merge_configs([detector_cfg, network_cfg, dataset_cfg, {'DETECTOR': detector_name}])
+
+
 def run(input_df):
     print(str(input_df))
     
@@ -22,11 +41,11 @@ def run(input_df):
     imgPath = base64ToImage(base64ImgString, workingDir)
 
     # load configuration
-    cfg = loadConfiguration(detectorName)
+    cfg = getConfiguration(detectorName)
 
     # load model
-    # od.prepareOnly_object_detector(cfg)
-    eval_model = load_model(os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./prometheus.dnn"))
+    od.prepareOnly_object_detector(cfg)
+    eval_model = load_model(os.path.join(workingDir), pretrainnedModelName))
 
     # score image
     regressed_rois, cls_probs = od.evaluate_single_image(eval_model, imgPath, cfg)
@@ -48,7 +67,7 @@ def main():
     from azureml.api.schema.sampleDefinition import SampleDefinition
     from azureml.api.realtime.services import generate_schema
 
-    demoimage = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./uploadedImg.jpg")
+    demoimage = os.path.join(os.path.dirname(workingDir), r"./uploadedImg.jpg")
     base64ImgString = imageToBase64(demoimage)
     df = pd.DataFrame(data=[[base64ImgString]], columns=['image base64 string'])
     

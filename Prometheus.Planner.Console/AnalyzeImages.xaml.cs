@@ -36,6 +36,7 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdAccept { get; set; }
         public ApplicationCommand CmdCancel { get; set; }
         public string CurrentStatus { get; set; }
+        public int CurrentProgress { get; set; }
         public bool ServiceRunning { get; set; }
         public string FilePath { get; set; }
         BackgroundWorker _worker;
@@ -53,7 +54,7 @@ namespace Prometeo.Planner.Console
             DetectedFires = new Collection<LocationMark>();
             CoveredArea = new GeoCoordinateCollection();
 
-            _serviceUrl = ConfigurationManager.AppSettings["prometheusWebServiceUrl"].ToString();
+            _serviceUrl = ConfigurationManager.AppSettings["prometheusWebServiceUrl"].ToString() + "/score";
             _worker = new BackgroundWorker()
             {
                 WorkerReportsProgress = true,
@@ -69,6 +70,8 @@ namespace Prometeo.Planner.Console
         private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             CurrentStatus = (string) e.UserState;
+            CurrentProgress = e.ProgressPercentage;
+            NotifyPropertyChanged("CurrentProgress");
             NotifyPropertyChanged("CurrentStatus");
         }
 
@@ -120,8 +123,10 @@ namespace Prometeo.Planner.Console
 
                 foreach (var result in batchResults)
                 {
+                    var scoreFile = allFiles.First((f) => System.IO.Path.GetFileName(f) == result.fileName);
+
                     var fires = result.labels.Where((l) => l == 1);
-                    var imageLocation = BingMapsRestServices.GetLatLongFromImage(allFiles[fileIndex]);
+                    var imageLocation = BingMapsRestServices.GetLatLongFromImage(scoreFile);
                     if (imageLocation == null)
                         imageLocation = new double[] { 0, 0 };
                     else
@@ -133,8 +138,11 @@ namespace Prometeo.Planner.Console
 
                     if (fires.Count() > 0)
                     {
-                        DetectedFires.Add(new LocationMark(imageLocation[0], imageLocation[1], allFiles[fileIndex], filterResults(result)));
+                        var filteredScores = filterResults(result);
+                        if (filteredScores.labels.Any())
+                            DetectedFires.Add(new LocationMark(imageLocation[0], imageLocation[1], scoreFile, filteredScores));
                     }
+                    _worker.ReportProgress((int)Math.Ceiling((decimal) fileIndex / allFiles.Count() * 100), scoreFile);
                     fileIndex++;
                 }
                 batchIndex++;
@@ -146,17 +154,19 @@ namespace Prometeo.Planner.Console
         {
             var filtered = new ImageDetectionResult()
             {
+                scoringId = result.scoringId,
                 executionTimeMs = result.executionTimeMs
             };
 
             var minScore = result.scores.Min();
             if (minScore > 0)
-                minScore = minScore * 0.5;
+                minScore = minScore * 1.5;
 
             for (var i = 0; i < result.labels.Count; i++)
             {
                 if (result.labels[i] == 1 && result.scores[i] > minScore)
                 {
+                    filtered.labels.Add(1);
                     filtered.boxes.Add(result.boxes[i]);
                     filtered.scores.Add(result.scores[i]);
                 }
@@ -205,7 +215,7 @@ namespace Prometeo.Planner.Console
             foreach (var imagePath in images)
             {
                 byte[] data = File.ReadAllBytes(imagePath);
-                postParameters.Add(string.Format("File{0}", fileIndex++), new FileUploader.FileParameter(data, "Image.jpg", "image/jpeg"));
+                postParameters.Add(string.Format("File{0}", fileIndex++), new FileUploader.FileParameter(data, System.IO.Path.GetFileName(imagePath), "image/jpeg"));
             }
 
             // Create request and receive response

@@ -110,7 +110,7 @@ __C.TRAIN.FG_FRACTION = 0.25
 __C.TRAIN.FG_THRESH = 0.5
 # Overlap threshold for a ROI to be considered background (class = 0 if
 # overlap in [LO, HI))
-__C.TRAIN.BG_THRESH_HI = 0.5
+__C.TRAIN.BG_THRESH_HI = 0.75 #Increased to 0.75. Too sensible for Prometheus
 __C.TRAIN.BG_THRESH_LO = 0.0
 
 # Normalize the targets using "precomputed" (or made up) means and stdevs

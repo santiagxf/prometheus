@@ -1,4 +1,4 @@
-import os, sys, io, json
+import os, sys, io, json, time
 import datetime as dt
 
 from service.utils.imageTools import imageToBase64, base64ToImage
@@ -17,6 +17,8 @@ class scorer:
 
     startTime = dt.datetime.now()
 
+    generateScoringId = lambda: str(round(time.time() * 1000))
+
     @staticmethod
     def getConfiguration(detector_name):
         # load configs for detector, base network and data set
@@ -33,15 +35,18 @@ class scorer:
         return merge_configs([detector_cfg, network_cfg, dataset_cfg, {'DETECTOR': detector_name}])
     
     @staticmethod
-    def buildResults(bboxes, labels, scores, startTime):
+    def buildResults(fileName, scoringId, bboxes, labels, scores, startTime):
         # Create json-encoded string of the model output
         executionTimeMs = (dt.datetime.now() - startTime).microseconds / 1000
-        outDict = {"boxes": bboxes.tolist(), "labels": labels.tolist(), "scores": scores.tolist(), "executionTimeMs": str(executionTimeMs)}
+        outDict = {"fileName": fileName, "scoringId": scoringId, "boxes": bboxes.tolist(), "labels": labels.tolist(), "scores": scores.tolist(), "executionTimeMs": str(executionTimeMs)}
 
         return(outDict)
 
-    def run(self, input_df):
+    def run(self, input_df, fileName, scoringId = 0):
         startTime = dt.datetime.now()
+
+        if (scoringId == 0):
+            scoringId = scorer.generateScoringId()
 
         #input
         imgPath = input_df
@@ -50,7 +55,7 @@ class scorer:
         regressed_rois, cls_probs = od.evaluate_single_image(self.eval_model, imgPath, self.cfg)
         bboxes, labels, scores = od.filter_results(regressed_rois, cls_probs, self.cfg)
 
-        return scorer.buildResults(bboxes, labels, scores, startTime)
+        return scorer.buildResults(fileName, scoringId, bboxes, labels, scores, startTime)
 
 
     def __init__(self):

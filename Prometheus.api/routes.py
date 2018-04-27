@@ -28,11 +28,11 @@ def score():
 
         for key, file in request.files.items():
             extension = os.path.splitext(file.filename)[1]
-            f_name = 'imgUploaded' + extension
-            fullpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), r'./imagepool/' + f_name)
+            scoringId = service.scoring.scorer.generateScoringId()
+            fullpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), r'./imagepool/' + scoringId + extension)
             file.save(fullpath)
 
-            allResults.append(scoringService.run(fullpath))
+            allResults.append(scoringService.run(fullpath, file.filename, scoringId))
 
         return str(json.dumps(allResults))
 
@@ -41,21 +41,24 @@ def score():
 
 @app.route('/test')
 def test():
-    f_name = 'imgUploaded.jpg'
+    f_name = r'./imagepool/' + 'imgUploaded.jpg'
     fullpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), f_name)
 
     # initialize
     scoringService = service.scoring.scorer()
-    results = scoringService.run(fullpath)
+    results = scoringService.run(fullpath, 'imgUploaded.jpg')
 
     return results
 
-@app.route('/supervise?scoreingId=<scoringId>&supervisedLabel=<supervisedLabel>')
-def supervise(scoringId, supervisedLabel):
-    f_name = scoringId + '.jpg'
-    l_name = r'./imagepool/' + supervisedLabel  + r'/' + f_name
+@app.route('/supervise/<supervisedLabel>/<scoringId>', methods=['POST'])
+def supervise(supervisedLabel, scoringId):
+    if (supervisedLabel in ['negative', 'positive']):
+        f_name = scoringId + '.jpg'
+        l_name = r'./imagepool/' + supervisedLabel  + r'/' + f_name
 
-    unlabeledPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), r'./imagepool/' + f_name)
-    labeledPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), l_name)
+        unlabeledPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), r'./imagepool/' + f_name)
+        labeledPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), l_name)
 
-    os.rename(unlabeledPath, labeledPath)
+        os.rename(unlabeledPath, labeledPath)
+
+        return str(json.dumps(supervisedLabel))

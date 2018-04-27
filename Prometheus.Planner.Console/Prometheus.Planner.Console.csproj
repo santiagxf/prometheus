@@ -168,7 +168,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Img\FireAlert.png" />
+    <Resource Include="Img\NotFire.png" />
+    <Resource Include="Img\SafeFire.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\Clean.png" />
     <Resource Include="Img\Draw.png" />

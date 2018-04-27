@@ -8,7 +8,11 @@ import os, sys
 import numpy as np
 import utils.od_utils as od
 from utils.config_helpers import merge_configs
+from cntk import load_model
 
+detectorName = 'FasterRCNN'
+pretrainnedModelName = r'./PretrainedModels/prometheus.dnn'
+workingDir = os.path.dirname(os.path.abspath(__file__))
 detector_name = 'FasterRCNN'
 
 def get_configuration(detector_name):
@@ -38,8 +42,12 @@ if __name__ == '__main__':
     for class_name in eval_results: print('AP for {:>15} = {:.4f}'.format(class_name, eval_results[class_name]))
     print('Mean AP = {:.4f}'.format(np.nanmean(list(eval_results.values()))))
 
+    # load model
+    # od.prepareOnly_object_detector(cfg)
+    # eval_model = load_model(os.path.join(workingDir, pretrainnedModelName))
+
     # detect objects in single image
-    img_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./DataSets/Fire/testImages/16347820.jpg")
+    img_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./DataSets/Fire/testImages/DJI_0011.jpg")
     regressed_rois, cls_probs = od.evaluate_single_image(eval_model, img_path, cfg)
     bboxes, labels, scores = od.filter_results(regressed_rois, cls_probs, cfg)
 

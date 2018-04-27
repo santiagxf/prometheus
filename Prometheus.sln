@@ -7,7 +7,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FireDetection", "FireDetect
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Planner.Console", "Prometheus.Planner.Console\Prometheus.Planner.Console.csproj", "{0ADEAD2A-C351-4E5E-9B20-FAAC212A2C41}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Prometheus.Web", "Prometheus.api\Prometheus.Web.pyproj", "{FD9A303D-44D2-4673-BE54-04BF85D647AA}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Prometheus.api", "Prometheus.api\Prometheus.api.pyproj", "{FD9A303D-44D2-4673-BE54-04BF85D647AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
