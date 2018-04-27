@@ -14,7 +14,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, IColle
         .FirstOrDefault(q => string.Compare(q.Key, "phone", true) == 0)
         .Value;
     
-    string partition = "ImagineCup";
+    string partition =  GetEnvironmentVariable("AzureWebJobsAlertGroupsPartition");
 
     if (!string.IsNullOrEmpty(name) && string.IsNullOrEmpty(phone))
         tableBinding.Add(
