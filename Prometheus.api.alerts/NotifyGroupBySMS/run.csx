@@ -10,8 +10,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, IQuery
 {
     log.Info($"C# Timer trigger function executed at: {DateTime.Now}");    
  
-    string accountSid = "ACbba6b44b4bfeb97749815633ca21864b";
-    string authToken = "6c4062e1e519beb77b9a2664045d927a";
+    string accountSid = GetEnvironmentVariable("TwilioAccountSid");
+    string authToken = GetEnvironmentVariable("TwilioAuthToken");
+    string twilioVerifiedNumber = GetEnvironmentVariable("TwilioPhoneNumber");
+
+    string partitionKey = GetEnvironmentVariable("AzureWebJobsAlertGroupsPartition");
 
     string googleMapsUrl = @"http://maps.google.com/maps?q={0}";
  
@@ -20,10 +23,10 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, IQuery
         .FirstOrDefault(q => string.Compare(q.Key, "location", true) == 0)
         .Value;
     
-    foreach (var person in tableBinding.Where(p => p.PartitionKey == "ImagineCup").ToList())
+    foreach (var person in tableBinding.Where(p => p.PartitionKey == partitionKey).ToList())
     {
          var result = client.SendMessage(
-            "+14804053397", // Insert your Twilio from SMS number here
+            twilioVerifiedNumber, // Insert your Twilio from SMS number here
             person.Phone, // Insert your verified (trial) to SMS number here
             "PrometheusAlert: A fire has been confirmed at " + string.Format(googleMapsUrl, fireLocation)         
         );
