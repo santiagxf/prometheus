@@ -155,6 +155,12 @@ namespace Prometeo.Planner.Console
                 });
                 NotifyPropertyChanged("Flights");
 
+                if (AreasOfInterest.Any())
+                {
+                    AreasOfInterest.First().AnalizedArea += analizedArea == null ? 0 : analizedArea.CoveredArea();
+                    NotifyPropertyChanged("AreasOfInterest");
+                }
+
                 foreach (var loc in wdw.DetectedFires)
                     MapModel.Marks.Add(loc);
 
