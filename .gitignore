@@ -115,5 +115,7 @@ FireDetection/DataSets/Fire/testImages
 Prometheus.api/service/obj/*
 Prometheus.api/service/env-*
 Prometheus.api/service/bin/*
+Prometheus.api/imagepool/*
 Prometheus.Planner.Console/bin/*
 Prometheus.Planner.Console/obj/*
+Prometheus.Planner.Console/App.config

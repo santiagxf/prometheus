@@ -10,12 +10,12 @@
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Fluent:Ribbon x:Name="rbMainUI" VerticalAlignment="Top" DockPanel.Dock="Top">
             <Fluent:RibbonTabItem Header="Flight image tools" IsSelected="True" >
-                <Fluent:RibbonGroupBox Header="Act on image">
-                    <Fluent:Button Header="Notify fire now" Size="Large" Command="{Binding CmdNotifyFire}" LargeIcon="/Img/FireAlert.png" />
-                    <Fluent:Button Header="It is a safe fire" Command="{Binding CmdSafeFire}" Size="Large" LargeIcon="/Img/SafeFire.png" />
+                <Fluent:RibbonGroupBox Header="Act on">
+                    <Fluent:Button Header="Notify fire now" Size="Large" Command="{Binding CmdNotifyFire}" LargeIcon="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Feedback">
-                    <Fluent:Button Header="It is not a fire" Size="Large" LargeIcon="/Img/NotFire.png" Command="{Binding CmdNotAFire}" />
+                    <Fluent:Button Header="It is a safe fire" Command="{Binding CmdSafeFire}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\SafeFire.png" />
+                    <Fluent:Button Header="It is not a fire" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\NotFire.png" Command="{Binding CmdNotAFire}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>

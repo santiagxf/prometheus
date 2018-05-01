@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         mc:Ignorable="d"
-        Title="AnalyzeImages" Height="204.571" Width="515" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+        Title="Analyzing images" Height="204.571" Width="515" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Grid>
         <Label Style="{StaticResource BlueH1}" Margin="10,10,0,0">
             Analizing images

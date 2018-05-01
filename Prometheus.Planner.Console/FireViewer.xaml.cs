@@ -1,4 +1,5 @@
 ﻿using Fluent;
+using Prometeo.Planner.Console.Tools;
 using Prometeo.Planner.Console.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -38,12 +39,13 @@ namespace Prometeo.Planner.Console
         public int ImageHPadding { get; private set; }
         public int TotalHeight { get => ImageHeight + ImageVPadding; }
         public int TotalWidth { get => ImageWidth + ImageHPadding; }
+        
         public Thickness CanvasMargin => new Thickness(0, -ImageVPadding,0,0);
         public ImageDetectionResult ImageResults { get; private set; }
 
-
+        double _longitude, _latitude;
         static readonly int _imagepad = 850;
-        public FireViewer(string imagePath, ImageDetectionResult results)
+        public FireViewer(string imagePath, ImageDetectionResult results, double longitude, double latitude)
         {
             InitializeComponent();
             CmdNotifyFire = new ApplicationCommand(CmdNotifyFire_Execute);
@@ -53,6 +55,8 @@ namespace Prometeo.Planner.Console
             DataContext = this;
             ImagePath = imagePath;
             ImageResults = results;
+            _longitude = longitude;
+            _latitude = latitude;
 
             Bitmap img = new Bitmap(imagePath);
 
@@ -116,7 +120,11 @@ namespace Prometeo.Planner.Console
 
         private void CmdNotifyFire_Execute(object obj)
         {
-            superviseImage("positive");
+            if (MessageBox.Show("We are about to notify all members of the PrometheusAlert about this fire. We will send the location of the incident. Proceed?", "Send alerts", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                superviseImage("positive");
+                RESTTools.SimpleURLRequest(ConfigurationManager.AppSettings["sendAlertToGroupEndpoint"].ToString(), _latitude.ToString(), _longitude.ToString(), ConfigurationManager.AppSettings["subscribePartition"].ToString());
+            }
         }
 
         public bool superviseImage(string label)

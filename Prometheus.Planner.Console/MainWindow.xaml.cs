@@ -6,6 +6,7 @@ using Prometeo.Planner.Console.Tools;
 using Prometeo.Planner.Console.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -34,11 +35,23 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdAnalizeNow { get; set; }
         public ApplicationCommand CmdMoveMap { get; set; }
         public ApplicationCommand CmdNotificationOpened { get; set; }
+        public ApplicationCommand CmdAlertGroups { get; set; }
 
         public MapModel MapModel { get; set; }
+        public ObservableCollection<Flight> Flights { get; set; }
+        public ObservableCollection<AreaOfInterest> AreasOfInterest { get; set; }
         public bool DrawingRequested { get; set; }
         public Visibility FireAlert { get; set; }
         public Visibility AreaIsGood { get; set; }
+
+        public static readonly SolidColorBrush RED_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0xCD, 0x5C, 0x5C));
+        public static readonly SolidColorBrush RED_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0xCD, 0x5C, 0x5C));
+        public static readonly SolidColorBrush GREEN_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
+        public static readonly SolidColorBrush GREEN_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x64, 0x00));
+        public static readonly SolidColorBrush INTEREST_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
+        public static readonly SolidColorBrush INTEREST_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
+
+        public static readonly int MAP_ZOOM_LEVEL_AREA = 16;
 
         public MainWindow()
         {
@@ -51,14 +64,21 @@ namespace Prometeo.Planner.Console
             CmdAnalizeNow = new ApplicationCommand(CmdAnalizeNow_Execute);
             CmdMoveMap = new ApplicationCommand(CmdMoveMap_Execute);
             CmdNotificationOpened = new ApplicationCommand(CmdNotificationOpened_Execute);
+            CmdAlertGroups = new ApplicationCommand(CmdAlertGroups_Execute);
 
             MapModel = new MapModel(BmpPlanner);
-            MapModel.Shading = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
-            MapModel.Stroke = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
+            Flights = new ObservableCollection<Flight>();
+            AreasOfInterest = new ObservableCollection<AreaOfInterest>();
             MapModel.StrokeThickness = 2;
 
             FireAlert = Visibility.Collapsed;
             AreaIsGood = Visibility.Collapsed;
+        }
+
+        private void CmdAlertGroups_Execute(object obj)
+        {
+            var wdw = new AlertGroup();
+            wdw.ShowDialog();
         }
 
         private void CmdNotificationOpened_Execute(object obj)
@@ -102,6 +122,18 @@ namespace Prometeo.Planner.Console
                 }
 
                 var allCoveredArea = wdw.CoveredArea.ConvexHull();
+                if (wdw.DetectedFires.Any())
+                {
+                    MapModel.Shading = RED_AREA_SHADING;
+                    MapModel.Stroke = RED_AREA_STROKE;
+                }
+                else
+                {
+                    MapModel.Shading = GREEN_AREA_SHADING;
+                    MapModel.Stroke = GREEN_AREA_STROKE;
+                }
+
+                MapPolygon analizedArea = null;
                 if (allCoveredArea != null && allCoveredArea.Count > 2)
                 {
                     MapModel.StartNewPolygon();
@@ -109,9 +141,19 @@ namespace Prometeo.Planner.Console
                     foreach (var point in allCoveredArea)
                         MapModel.AddPointToPolygon(point);
 
-                    MapModel.FinishCurrentPolygon();
+                    analizedArea = MapModel.FinishCurrentPolygon();
                 }
 
+                Flights.Add(new Flight()
+                {
+                    Folder = filePath,
+                    CoveredArea = analizedArea == null ? 0 : analizedArea.CoveredArea(),
+                    Date = DateTime.Now,
+                    FireDetected = wdw.DetectedFires.Any(),
+                    Images = wdw.CoveredArea.Count,
+                    AreaColor = MapModel.Shading
+                });
+                NotifyPropertyChanged("Flights");
 
                 foreach (var loc in wdw.DetectedFires)
                     MapModel.Marks.Add(loc);
@@ -123,16 +165,28 @@ namespace Prometeo.Planner.Console
 
         private void CmdCleanMap_Execute(object obj)
         {
+            Flights.Clear();
+            AreasOfInterest.Clear();
             MapModel.Clean();
+
+            NotifyPropertyChanged("Flights");
+            NotifyPropertyChanged("AreasOfInterest");
+
             RenderMap();
         }
 
         private void CmdStartPolygon_Execute(object obj)
         {
-            DrawingRequested = true;
-            NotifyPropertyChanged("DrawingRequested");
+            if (BmpPlanner.ZoomLevel > 10 || MessageBox.Show("The current zoom level in the map looks a big high. We suggest you use the Zoom and Pan to look for the area of interest by name before marking it. Do you want to continue anyway?", "Zoom level too high", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                MapModel.Shading = INTEREST_AREA_SHADING;
+                MapModel.Stroke = INTEREST_AREA_STROKE;
 
-            BmpPlanner.MouseDown += BmpPlanner_MouseDown;
+                DrawingRequested = true;
+                NotifyPropertyChanged("DrawingRequested");
+
+                BmpPlanner.MouseDown += BmpPlanner_MouseDown;
+            }
         }
 
         private void RenderMap()
@@ -143,7 +197,7 @@ namespace Prometeo.Planner.Console
             foreach (var polygon in MapModel.Polygons)
             {
                 BmpPlanner.Children.Add(polygon);
-                labelLayer.AddChild(AddLabelInMap(polygon.CoveredArea().ToString("n2") + " m2"), polygon.CenterPosition());
+                //labelLayer.AddChild(AddLabelInMap(polygon.CoveredArea().ToString("n2") + " m2"), polygon.CenterPosition());
             }
 
             int index = 0;
@@ -162,14 +216,14 @@ namespace Prometeo.Planner.Console
             if (MapModel.Marks.Any())
             {
                 var centerPoint = MapModel.Marks.First();
-                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), 14);
+                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), MAP_ZOOM_LEVEL_AREA);
 
                 FireAlert = Visibility.Visible;
                 AreaIsGood = Visibility.Collapsed;
                 NotifyPropertyChanged("AreaIsGood");
                 NotifyPropertyChanged("FireAlert");
             }
-            else
+            else if(Flights.Any())
             {
                 AreaIsGood = Visibility.Visible;
                 FireAlert = Visibility.Collapsed;
@@ -184,7 +238,7 @@ namespace Prometeo.Planner.Console
 
             var location = (LocationMark)sender;
 
-            var wdw = new FireViewer(location.ImagePath, location.DetectionResults);
+            var wdw = new FireViewer(location.ImagePath, location.DetectionResults, location.Longitude, location.Latitude);
             wdw.ShowDialog();
         }
 
@@ -203,13 +257,22 @@ namespace Prometeo.Planner.Console
         {
             if (MapModel.IsCurrentlyDrawing)
             {
-                MapModel.FinishCurrentPolygon();
+                var pol = MapModel.FinishCurrentPolygon();
 
                 BmpPlanner.MouseDown -= BmpPlanner_MouseDown;
                 BmpPlanner.MouseMove -= BmpPlanner_MouseMove;
 
                 DrawingRequested = false;
                 NotifyPropertyChanged("DrawingRequested");
+
+                AreasOfInterest.Add(new AreaOfInterest()
+                {
+                    AnalizedArea = 0,
+                    Area = pol.CoveredArea(),
+                    RequiredFlightTime = 0,
+                    RequiredImages = 0
+                });
+                NotifyPropertyChanged("AreasOfInterest");
 
                 RenderMap();
             }

@@ -8,7 +8,7 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:BingMaps="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d" WindowState="Maximized"
-        Title="Prometheus: ImagineCup 2018" d:DesignHeight="600" Width="800">
+        Title="Prometheus: The AI fire detector drone" d:DesignHeight="900" Width="800">
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CmdEndPolygonDrawing }" />
     </Window.InputBindings>
@@ -24,16 +24,20 @@
             </Fluent:Ribbon.Menu>
             <Fluent:RibbonTabItem Header="Flight and analyze" IsSelected="True" >
                 <Fluent:RibbonGroupBox Header="Map">
-                    <Fluent:Button Header="Search and pan" Size="Large" Command="{Binding CmdMoveMap}" LargeIcon="/Img/Look.png" />
+                    <Fluent:Button Header="Search and pan" Size="Large" Command="{Binding CmdMoveMap}" LargeIcon="/Prometheus.Planner.Console;component/Img/Look.png" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Design">
-                    <Fluent:ToggleButton Header="Draw area" Size="Large" Command="{Binding CmdStartPolygon}" LargeIcon="/Img/Draw.png" IsChecked="{Binding DrawingRequested }" />
-                    <Fluent:Button Header="Clean map" Command="{Binding CmdCleanMap}" Size="Large" LargeIcon="/Img/Clean.png" />
+                    <Fluent:ToggleButton Header="Specify area of interest" Size="Large" Command="{Binding CmdStartPolygon}" LargeIcon="/Prometheus.Planner.Console;component/Img/Draw.png" IsChecked="{Binding DrawingRequested }" />
+                    <Fluent:Button Header="Clean map" Command="{Binding CmdCleanMap}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Clean.png" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Fire detection">
-                    <Fluent:Button Header="Analyze new flight" Size="Large" Command="{Binding CmdAnalizeNow}" LargeIcon="/Img/Run.png" />
+                    <Fluent:Button Header="Analyze new flight" Size="Large" Command="{Binding CmdAnalizeNow}" LargeIcon="/Prometheus.Planner.Console;component/Img\Run.png" />
                     <Fluent:RibbonGroupBox Height="75" />
-                    <Fluent:Button Header="Save results" Size="Large" LargeIcon="/Img/Save.png" />
+                    <Fluent:Button Header="Save results" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Save.png" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Alerts and settings">
+                    <Fluent:Button Header="My group" Size="Large" Command="{Binding CmdAlertGroups}" LargeIcon="/Prometheus.Planner.Console;component/Img\Group.png" />
+                    <Fluent:Button Header="Settings" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\Configure.png" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
@@ -43,17 +47,52 @@
             </StackPanel.InputBindings>
             <Border Visibility="{Binding AreaIsGood}" Background="#FF95D889" BorderBrush="#FF549D47" BorderThickness="1" Padding="10,2">
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The flight data doesn't contain any hit of a fire being developed. Check the map to see the area covered in the flight." /></TextBlock>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The flight data doesn't contain any hit of a fire being developed. Check the map to see the area covered in the flight." /></TextBlock>
                 </Grid>
             </Border>
             <Border Visibility="{Binding FireAlert }" Background="IndianRed" BorderBrush="DarkRed" BorderThickness="1" Padding="10,2">
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="We detected potencial fires under development in the are. Map has been moved to the first location with a fire detected. Explore the area." /></TextBlock>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="We detected potencial fires under development in the are. Map has been moved to the first location with a fire detected. Explore the area." /></TextBlock>
                 </Grid>
             </Border>
         </StackPanel>
-        <Border Background="WhiteSmoke" DockPanel.Dock="Top">
-            <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Margin="0,0,0,0" MinHeight="600" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="3" />
-        </Border>
+        <StackPanel Name="SpnMain" Background="WhiteSmoke" DockPanel.Dock="Top" Orientation="Horizontal">
+            <StackPanel Width="{Binding ElementName=SpnMain, Path=ActualWidth}">
+                <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Height="{Binding ElementName=SpnMain, Path=ActualHeight}" Margin="0,0,0,0" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="3" />
+                <Image Source="Img/prometheus.png" Margin="0,-160, 0, 0" Height="60" HorizontalAlignment="Right" />
+            </StackPanel>
+            <StackPanel Width="260" Margin="-260,0,0,0">
+                <ItemsControl ItemsSource="{Binding AreasOfInterest}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0,6, 0, 1" Margin="14" Background="{StaticResource AccentBlue}" BorderBrush="LightGray" Padding="4">
+                                <StackPanel>
+                                    <Label Content="Area of interest" Style="{StaticResource BlueH1}" Foreground="White"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Covered area:&#160;</Run><Run Text="{Binding Area, StringFormat=##0.00}" /><Run>&#160;mts2</Run></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Analized area:&#160;</Run><Run Text="{Binding AnalizedAreaPercentage, StringFormat=p, Mode=OneWay}" /></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Flight time:&#160;</Run><Run Text="{Binding RequiredFlightTime }" /></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Images required:&#160;</Run><Run Text="{Binding RequiredImages}" /></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}">Estimation in the requirement to flight the are will vary depending on the drone.</TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Flights}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0,6,0,1" Margin="14,8,14,8" Background="{Binding AreaColor}" BorderBrush="LightGray" Padding="4">
+                                <StackPanel>
+                                    <Label Content="Flight" Style="{StaticResource BlueH1}" Foreground="White"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Covered area:&#160;</Run><Run Text="{Binding CoveredArea, StringFormat=##0.00}" /><Run>&#160;mts2</Run></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Images analyzed:&#160;</Run><Run Text="{Binding Images}" /></TextBlock>
+                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Results:&#160;</Run><Run Text="{Binding ResultAsString, Mode=OneWay }" /></TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
     </DockPanel>
 </Fluent:RibbonWindow>

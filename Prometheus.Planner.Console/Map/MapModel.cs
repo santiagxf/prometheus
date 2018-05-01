@@ -74,7 +74,7 @@ namespace Prometeo.Planner.Console.Map
             _currentDraftLoc = null;
         }
 
-        public void FinishCurrentPolygon()
+        public MapPolygon FinishCurrentPolygon()
         {
             if (IsCurrentlyDraftLocation)
             {
@@ -86,6 +86,11 @@ namespace Prometeo.Planner.Console.Map
 
             _currentDrawingActivity = null;
             _currentDraftLoc = null;
+
+            if (Polygons.Count > 0)
+                return Polygons[Polygons.Count - 1];
+            else
+                return null;
         }
 
         internal void AddDraftPointToPolygon(Point point)
