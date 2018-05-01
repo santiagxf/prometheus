@@ -32,7 +32,7 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdAdd { get; set; }
         public ApplicationCommand CmdRemove { get; set; }
         public List<AlertGroups> AllMembers { get; set; }
-        public AlertGroup SelectedMember { get; set; }
+        public AlertGroups SelectedMember { get; set; }
         public AlertGroup()
         {
             InitializeComponent();
@@ -47,9 +47,8 @@ namespace Prometeo.Planner.Console
         private void CmdRemove_Execute(object obj)
         {
             if (SelectedMember != null)
-            {
-
-            }
+                if (RESTTools.SimpleURLRequest(ConfigurationManager.AppSettings["unsubscribeNumberToGroupAlert"].ToString(), SelectedMember.RowKey))
+                    CmdActivated_Execute(null);
         }
 
         private void CmdAdd_Execute(object obj)
