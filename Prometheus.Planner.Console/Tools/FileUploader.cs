@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -101,6 +103,40 @@ namespace Prometeo.Planner.Console.Tools
             formDataStream.Close();
 
             return formData;
+        }
+
+        public static byte[] ResizedImage(string path, double factor)
+        {
+            Bitmap imgIn = new Bitmap(path);
+            double y = imgIn.Height;
+            double x = imgIn.Width;
+
+            System.IO.MemoryStream outStream = new System.IO.MemoryStream();
+            Bitmap imgOut = new Bitmap((int)(x * factor), (int)(y * factor));
+
+            // Set DPI of image (xDpi, yDpi)
+            imgOut.SetResolution(72, 72);
+
+            Graphics g = Graphics.FromImage(imgOut);
+            g.Clear(Color.White);
+            g.DrawImage(imgIn, new Rectangle(0, 0, (int)(factor * x), (int)(factor * y)),
+              new Rectangle(0, 0, (int)x, (int)y), GraphicsUnit.Pixel);
+
+            imgOut.Save(outStream, getImageFormat(path));
+            return outStream.ToArray();
+        }
+
+        static ImageFormat getImageFormat(String path)
+        {
+            switch (Path.GetExtension(path))
+            {
+                case ".bmp": return ImageFormat.Bmp;
+                case ".gif": return ImageFormat.Gif;
+                case ".jpg": return ImageFormat.Jpeg;
+                case ".png": return ImageFormat.Png;
+                default: break;
+            }
+            return ImageFormat.Jpeg;
         }
 
         public class FileParameter

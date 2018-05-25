@@ -6,6 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         mc:Ignorable="d"
+        Activated="Window_Activated"
+        Style="{StaticResource BlueThemeStandardWindows}"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         WindowStartupLocation="CenterScreen"
         Title="Alerts and notifications group" Height="450" Width="800">
@@ -19,16 +21,17 @@
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
         <Grid>
-            <DataGrid ItemsSource="{Binding AllMembers }" SelectedItem="{Binding SelectedMember}" IsReadOnly="True" AutoGenerateColumns="False" Margin="14,99,18,62">
+            <Label Style="{StaticResource BlueH1}" Margin="10,8,0,0" Content="Alert my group"/>
+            <Button Content="Close" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,18.286,15" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
+            <TextBlock Padding="5" TextWrapping="Wrap" Text="We can notify you team with a fire is located so then can act quickly on it. Notifications are send using standard SMS and we will sent the location of the inciden." Height="47" Margin="10,47,18,0" VerticalAlignment="Top"/>
+            <Label Style="{StaticResource BlueH1}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Loading group members"/>
+            <DataGrid ItemsSource="{Binding AllMembers}" SelectedItem="{Binding SelectedMember}" IsReadOnly="True" AutoGenerateColumns="False" Margin="14,99,18,62" Visibility="{Binding AllMembersVisibility}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
                     <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="300" />
                     <DataGridTextColumn Header="Subscription" Binding="{Binding PartitionKey}" Width="150" />
                 </DataGrid.Columns>
             </DataGrid>
-            <Label Style="{StaticResource BlueH1}" Margin="10,8,0,0" Content="Alert my group"/>
-            <Button Content="Close" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,18,24" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
-            <TextBlock Padding="5" TextWrapping="Wrap" Text="We can notify you team with a fire is located so then can act quickly on it. Notifications are send using standard SMS and we will sent the location of the inciden." Height="47" Margin="10,47,18,0" VerticalAlignment="Top"/>
         </Grid>
     </DockPanel>
 </Fluent:RibbonWindow>

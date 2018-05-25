@@ -41,7 +41,7 @@ namespace Prometeo.Planner.Console
         public string FilePath { get; set; }
         BackgroundWorker _worker;
         string _serviceUrl;
-        int _imageBatchSize = 5;
+        
 
         public Collection<LocationMark> DetectedFires { get; set; }
         public GeoCoordinateCollection CoveredArea { get; set; }
@@ -118,7 +118,7 @@ namespace Prometeo.Planner.Console
 
             while (filesLeft)
             {
-                var batch = allFiles.Skip(batchIndex * _imageBatchSize).Take(_imageBatchSize);
+                var batch = allFiles.Skip(batchIndex * Settings.IMAGE_BATCH_SIZE).Take(Settings.IMAGE_BATCH_SIZE);
                 var batchResults = scoreImageBatch(batch);
 
                 foreach (var result in batchResults)
@@ -146,7 +146,7 @@ namespace Prometeo.Planner.Console
                     fileIndex++;
                 }
                 batchIndex++;
-                filesLeft = batchIndex * _imageBatchSize < allFiles.Count();
+                filesLeft = batchIndex * Settings.IMAGE_BATCH_SIZE < allFiles.Count();
             }
         }
 
@@ -158,9 +158,9 @@ namespace Prometeo.Planner.Console
                 executionTimeMs = result.executionTimeMs
             };
 
-            var minScore = result.scores.Min();
+            var minScore = result.scores.Max();
             if (minScore > 0)
-                minScore = minScore * 1.5;
+                minScore = minScore / (1 + Settings.SCORE_SENSITIVITY);
 
             for (var i = 0; i < result.labels.Count; i++)
             {
@@ -214,7 +214,7 @@ namespace Prometeo.Planner.Console
 
             foreach (var imagePath in images)
             {
-                byte[] data = File.ReadAllBytes(imagePath);
+                byte[] data = Settings.RESIZE_IMAGES_FACTOR == 1 ? File.ReadAllBytes(imagePath) : FileUploader.ResizedImage(imagePath, Settings.RESIZE_IMAGES_FACTOR);
                 postParameters.Add(string.Format("File{0}", fileIndex++), new FileUploader.FileParameter(data, System.IO.Path.GetFileName(imagePath), "image/jpeg"));
             }
 

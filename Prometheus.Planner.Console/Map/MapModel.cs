@@ -25,6 +25,7 @@ namespace Prometeo.Planner.Console.Map
 
         public MapModel(Microsoft.Maps.MapControl.WPF.Map map)
         {
+            StrokeThickness = 2;
             Polygons = new Collection<MapPolygon>();
             Marks = new GeoCoordinateCollection();
             _map = map;
@@ -102,6 +103,16 @@ namespace Prometeo.Planner.Console.Map
             }
             else
                 _currentDrawingActivity.Locations[_currentDrawingActivity.Locations.Count - 1] = _map.ViewportPointToLocation(point);
+        }
+
+        internal bool RemoveMark(LocationMark location)
+        {
+            var point = Marks.Where((m) => m.DetectionResults.scoringId == location.DetectionResults.scoringId).FirstOrDefault();
+            if (point == null)
+                return false;
+
+            Marks.Remove(point);
+            return true;
         }
     }
 }

@@ -12,6 +12,7 @@
             <Fluent:RibbonTabItem Header="Flight image tools" IsSelected="True" >
                 <Fluent:RibbonGroupBox Header="Act on">
                     <Fluent:Button Header="Notify fire now" Size="Large" Command="{Binding CmdNotifyFire}" LargeIcon="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
+                    <Fluent:ToggleButton Header="View tags" Size="Large" IsChecked="{Binding ShowTags}" LargeIcon="/Prometheus.Planner.Console;component/Img\Tags.png" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Feedback">
                     <Fluent:Button Header="It is a safe fire" Command="{Binding CmdSafeFire}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\SafeFire.png" />

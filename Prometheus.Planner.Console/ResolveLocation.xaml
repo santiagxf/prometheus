@@ -8,7 +8,7 @@
         Title="Look for a location" Height="202.571" Width="591.429" WindowStartupLocation="CenterScreen" Style="{StaticResource BlueThemeStandardWindows}">
     <Grid>
         <Label x:Name="LblTitle" Style="{StaticResource BlueH1}" Margin="10,10,0,0">
-            Tell us where this image was taken
+            Tell us where these images were taken
         </Label>
         <TextBox Height="25" Margin="14,81,23.714,0" TextWrapping="Wrap" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
         <Button Content="Ok" Command="{Binding CmdAccept}" IsDefault="True" Style="{StaticResource BlueButton}" Margin="0,0,140.714,18.571" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>

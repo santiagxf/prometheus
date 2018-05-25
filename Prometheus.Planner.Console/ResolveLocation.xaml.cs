@@ -58,9 +58,16 @@ namespace Prometeo.Planner.Console
             this.Hide();
         }
 
-        internal static double[] Resolve()
+        internal static double[] Resolve(bool gpsDataNotFound)
         {
             var wdw = new ResolveLocation();
+
+            if (!gpsDataNotFound)
+            {
+                wdw.LblTitle.Content = "Look for a location to zoom in";
+                wdw.LblText.Content = "Type the name of a city or state";
+            }
+
             wdw.ShowDialog();
 
             var result = wdw.ResolvedLocation;

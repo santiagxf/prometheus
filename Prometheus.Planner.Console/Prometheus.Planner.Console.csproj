@@ -37,6 +37,9 @@
     <ApplicationIcon>prometheus.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catfood.Shapefile">
+      <HintPath>..\references\Catfood.Shapefile.dll</HintPath>
+    </Reference>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
@@ -113,11 +116,14 @@
     <Compile Include="Geo\GeoCoordinate.cs" />
     <Compile Include="Geo\GeoCoordinateCollection.cs" />
     <Compile Include="Geo\GeoTagImage.cs" />
+    <Compile Include="Geo\NationalWeatherService.cs" />
     <Compile Include="Subscribe.xaml.cs">
       <DependentUpon>Subscribe.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AreaOfInterest.cs" />
+    <Compile Include="ViewModel\AreasOfInterestCollection.cs" />
     <Compile Include="ViewModel\Flight.cs" />
+    <Compile Include="ViewModel\FlightCollection.cs" />
     <Compile Include="ViewModel\ImageDetectionResult.cs" />
     <Compile Include="Map\LocationMark.cs" />
     <Compile Include="Map\MapModel.cs" />
@@ -134,6 +140,7 @@
     <Compile Include="ViewModel\Alerts\AlertGroups.cs" />
     <Compile Include="ViewModel\ApplicationCommand.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
+    <Compile Include="ViewModel\UserFeedbackAction.cs" />
     <Page Include="AlertGroup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -229,6 +236,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="prometheus.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\prometheus-red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\Tags.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\RedFlag.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

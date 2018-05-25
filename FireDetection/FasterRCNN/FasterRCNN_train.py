@@ -32,10 +32,9 @@ from utils.proposal_helpers import ProposalProvider
 from FastRCNN.FastRCNN_train import clone_model, clone_conv_layers, create_fast_rcnn_predictor, \
     create_detection_losses
 
-def prepare(cfg, use_arg_parser=True):
+def prepare(cfg, use_arg_parser=True, outputPath = os.path.join(abs_path, "Output")):
     cfg.MB_SIZE = 1
     cfg.NUM_CHANNELS = 3
-    cfg.OUTPUT_PATH = os.path.join(abs_path, "Output")
     cfg["DATA"].MAP_FILE_PATH = os.path.join(abs_path, cfg["DATA"].MAP_FILE_PATH)
     running_locally = os.path.exists(cfg["DATA"].MAP_FILE_PATH)
     if running_locally:
@@ -62,9 +61,9 @@ def prepare(cfg, use_arg_parser=True):
     cfg["DATA"].TRAIN_ROI_FILE = os.path.join(data_path, cfg["DATA"].TRAIN_ROI_FILE)
     cfg["DATA"].TEST_ROI_FILE = os.path.join(data_path, cfg["DATA"].TEST_ROI_FILE)
 
-    cfg['MODEL_PATH'] = os.path.join(cfg.OUTPUT_PATH, "faster_rcnn_eval_{}_{}.model"
+    cfg['MODEL_PATH'] = os.path.join(outputPath, "faster_rcnn_eval_{}_{}.model"
                                      .format(cfg["MODEL"].BASE_MODEL, "e2e" if cfg["CNTK"].TRAIN_E2E else "4stage"))
-    cfg['BASE_MODEL_PATH'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "PretrainedModels",
+    cfg['BASE_MODEL_PATH'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../PretrainedModels",
                                           cfg["MODEL"].BASE_MODEL_FILE)
 
     cfg["DATA"].CLASSES = parse_class_map_file(cfg["DATA"].CLASS_MAP_FILE)

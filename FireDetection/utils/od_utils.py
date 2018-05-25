@@ -14,7 +14,7 @@ def prepareOnly_object_detector(cfg):
         print('Unknown detector: {}'.format(detector_name))
 
 
-def train_object_detector(cfg):
+def train_object_detector(cfg, modelOutputPath = ''):
     """
     Trains an object detector as specified in the configuration
     :param cfg: the configuration
@@ -30,7 +30,7 @@ def train_object_detector(cfg):
         eval_model = train_fast_rcnn(cfg)
     elif detector_name == 'FasterRCNN':
         from FasterRCNN.FasterRCNN_train import prepare, train_faster_rcnn
-        prepare(cfg, use_arg_parser=False)
+        prepare(cfg, use_arg_parser=False, outputPath = modelOutputPath)
         eval_model = train_faster_rcnn(cfg)
     else:
         print('Unknown detector: {}'.format(detector_name))

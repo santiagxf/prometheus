@@ -4,6 +4,7 @@ Routes and views for the flask application.
 
 import json, os
 import service.scoring
+import service.gistools
 
 from app import app
 from datetime import datetime
@@ -62,3 +63,7 @@ def supervise(supervisedLabel, scoringId):
         os.rename(unlabeledPath, labeledPath)
 
         return str(json.dumps(supervisedLabel))
+
+@app.route('/gis/<ugc>', methods=['GET'])
+def gisUgc(ugc):
+    return str(json.dumps(service.gistools.getShapeFromUGC(ugc)))

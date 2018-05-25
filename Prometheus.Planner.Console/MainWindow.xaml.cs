@@ -36,22 +36,19 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdMoveMap { get; set; }
         public ApplicationCommand CmdNotificationOpened { get; set; }
         public ApplicationCommand CmdAlertGroups { get; set; }
+        public ApplicationCommand CmdConfig { get; set; }
 
-        public MapModel MapModel { get; set; }
-        public ObservableCollection<Flight> Flights { get; set; }
-        public ObservableCollection<AreaOfInterest> AreasOfInterest { get; set; }
+        public FlightCollection Flights { get; set; }
+        public AreasOfInterestCollection AreasOfInterest { get; set; }
+        public AreasOfInterestCollection RedFlagsNotifications { get; set; }
         public bool DrawingRequested { get; set; }
         public Visibility FireAlert { get; set; }
         public Visibility AreaIsGood { get; set; }
+        public Visibility DrawingHelpVisible => DrawingRequested ? Visibility.Visible : Visibility.Collapsed;
 
-        public static readonly SolidColorBrush RED_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0xCD, 0x5C, 0x5C));
-        public static readonly SolidColorBrush RED_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0xCD, 0x5C, 0x5C));
-        public static readonly SolidColorBrush GREEN_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
-        public static readonly SolidColorBrush GREEN_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x64, 0x00));
-        public static readonly SolidColorBrush INTEREST_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
-        public static readonly SolidColorBrush INTEREST_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
-
-        public static readonly int MAP_ZOOM_LEVEL_AREA = 16;
+        MapModel _draftMapModel;
+        
+        static readonly int MAP_ZOOM_LEVEL_AREA = 16;
 
         public MainWindow()
         {
@@ -65,14 +62,34 @@ namespace Prometeo.Planner.Console
             CmdMoveMap = new ApplicationCommand(CmdMoveMap_Execute);
             CmdNotificationOpened = new ApplicationCommand(CmdNotificationOpened_Execute);
             CmdAlertGroups = new ApplicationCommand(CmdAlertGroups_Execute);
+            CmdConfig = new ApplicationCommand(CmdConfig_Execute);
 
-            MapModel = new MapModel(BmpPlanner);
-            Flights = new ObservableCollection<Flight>();
-            AreasOfInterest = new ObservableCollection<AreaOfInterest>();
-            MapModel.StrokeThickness = 2;
+            Flights = new FlightCollection();
+            RedFlagsNotifications = new AreasOfInterestCollection();
+            AreasOfInterest = new AreasOfInterestCollection();
+
+            var redFlags = new AreaOfInterest()
+            {
+                MapModel = new MapModel(BmpPlanner)
+                {
+                    Shading = MapPolygonExtensions.REDFLAG_AREA_SHADING,
+                    Stroke = MapPolygonExtensions.REDFLAG_AREA_STROKE
+                }
+            };
+            //redFlags.MapModel.Marks.AddRange(NationalWeatherService.ConvertUGCtoPosition(NationalWeatherService.QueryFireAlerts()));
+            NationalWeatherService.ConvertUGCtoPolygon(NationalWeatherService.QueryFireAlerts(), redFlags.MapModel);
+            RedFlagsNotifications.Add(redFlags);
 
             FireAlert = Visibility.Collapsed;
             AreaIsGood = Visibility.Collapsed;
+
+            RenderMap();
+        }
+
+        private void CmdConfig_Execute(object obj)
+        {
+            var wdw = new Settings();
+            wdw.ShowDialog();
         }
 
         private void CmdAlertGroups_Execute(object obj)
@@ -88,7 +105,7 @@ namespace Prometeo.Planner.Console
 
         private void CmdMoveMap_Execute(object obj)
         {
-            var pos = ResolveLocation.Resolve();
+            var pos = ResolveLocation.Resolve(false);
             if (pos != null)
             {
                 BmpPlanner.SetView(new Location(pos[0], pos[1]), 10);
@@ -110,7 +127,7 @@ namespace Prometeo.Planner.Console
                 var missingLocations = wdw.DetectedFires.Where((f) => f.Longitude == 0 && f.Latitude == 0);
                 if (missingLocations.Any())
                 {
-                    var imageLocation = ResolveLocation.Resolve();
+                    var imageLocation = ResolveLocation.Resolve(true);
                     if (imageLocation != null)
                     {
                         foreach (var l in missingLocations)
@@ -121,48 +138,14 @@ namespace Prometeo.Planner.Console
                     }
                 }
 
-                var allCoveredArea = wdw.CoveredArea.ConvexHull();
-                if (wdw.DetectedFires.Any())
-                {
-                    MapModel.Shading = RED_AREA_SHADING;
-                    MapModel.Stroke = RED_AREA_STROKE;
-                }
-                else
-                {
-                    MapModel.Shading = GREEN_AREA_SHADING;
-                    MapModel.Stroke = GREEN_AREA_STROKE;
-                }
-
-                MapPolygon analizedArea = null;
-                if (allCoveredArea != null && allCoveredArea.Count > 2)
-                {
-                    MapModel.StartNewPolygon();
-
-                    foreach (var point in allCoveredArea)
-                        MapModel.AddPointToPolygon(point);
-
-                    analizedArea = MapModel.FinishCurrentPolygon();
-                }
-
-                Flights.Add(new Flight()
-                {
-                    Folder = filePath,
-                    CoveredArea = analizedArea == null ? 0 : analizedArea.CoveredArea(),
-                    Date = DateTime.Now,
-                    FireDetected = wdw.DetectedFires.Any(),
-                    Images = wdw.CoveredArea.Count,
-                    AreaColor = MapModel.Shading
-                });
+                var flight = new Flight(wdw.DetectedFires, wdw.CoveredArea, filePath, new MapModel(BmpPlanner));
+                Flights.Add(flight);
                 NotifyPropertyChanged("Flights");
 
-                if (AreasOfInterest.Any())
-                {
-                    AreasOfInterest.First().AnalizedArea += analizedArea == null ? 0 : analizedArea.CoveredArea();
-                    NotifyPropertyChanged("AreasOfInterest");
-                }
-
-                foreach (var loc in wdw.DetectedFires)
-                    MapModel.Marks.Add(loc);
+                AreasOfInterest.AddToAnalizedArea(flight.CoveredArea);
+                AreasOfInterest.NotifyAllPropertyChanged("AnalizedAreaPercentage");
+                NotifyPropertyChanged("AreasOfInterest");
+                
 
                 wdw.Close();
                 RenderMap();
@@ -173,7 +156,6 @@ namespace Prometeo.Planner.Console
         {
             Flights.Clear();
             AreasOfInterest.Clear();
-            MapModel.Clean();
 
             NotifyPropertyChanged("Flights");
             NotifyPropertyChanged("AreasOfInterest");
@@ -185,11 +167,14 @@ namespace Prometeo.Planner.Console
         {
             if (BmpPlanner.ZoomLevel > 10 || MessageBox.Show("The current zoom level in the map looks a big high. We suggest you use the Zoom and Pan to look for the area of interest by name before marking it. Do you want to continue anyway?", "Zoom level too high", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                MapModel.Shading = INTEREST_AREA_SHADING;
-                MapModel.Stroke = INTEREST_AREA_STROKE;
+                _draftMapModel = new MapModel(BmpPlanner);
+
+                _draftMapModel.Shading = MapPolygonExtensions.INTEREST_AREA_SHADING;
+                _draftMapModel.Stroke = MapPolygonExtensions.INTEREST_AREA_STROKE;
 
                 DrawingRequested = true;
                 NotifyPropertyChanged("DrawingRequested");
+                NotifyPropertyChanged("DrawingHelpVisible");
 
                 BmpPlanner.MouseDown += BmpPlanner_MouseDown;
             }
@@ -200,28 +185,24 @@ namespace Prometeo.Planner.Console
             BmpPlanner.Children.Clear();
             MapLayer labelLayer = new MapLayer();
 
-            foreach (var polygon in MapModel.Polygons)
-            {
-                BmpPlanner.Children.Add(polygon);
-                //labelLayer.AddChild(AddLabelInMap(polygon.CoveredArea().ToString("n2") + " m2"), polygon.CenterPosition());
-            }
+            int totalFireCount = 0;
 
-            int index = 0;
-            foreach (var loc in MapModel.Marks)
-            {
-                var pin = new Pushpin();
-                pin.MouseDown += (sender, e) => Pin_MouseDown(loc, e);
-                pin.Location = loc;
-                pin.ToolTip = "Potential fire";
-                pin.Content = index++;
-                BmpPlanner.Children.Add(pin);
-            }
+            if (_draftMapModel != null)
+                RenderMap(_draftMapModel, labelLayer, null, null);
 
-            BmpPlanner.Children.Add(labelLayer);
+            foreach (var aoi in AreasOfInterest)
+                RenderMap(aoi.MapModel, labelLayer, null, null);
 
-            if (MapModel.Marks.Any())
+            foreach (var flight in Flights)
+                totalFireCount += RenderMap(flight.MapModel, labelLayer, "Potential fire", (ControlTemplate)Application.Current.Resources["FirePushPinTemplate"]);
+
+            // Plot red flags alerts
+            foreach (var redflag in RedFlagsNotifications)
+                RenderMap(redflag.MapModel, labelLayer, "Red flag warning", null);
+
+            if (totalFireCount > 0)
             {
-                var centerPoint = MapModel.Marks.First();
+                var centerPoint = Flights.Where((f) => f.FireDetected).First().MapModel.Marks.First();
                 BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), MAP_ZOOM_LEVEL_AREA);
 
                 FireAlert = Visibility.Visible;
@@ -229,13 +210,41 @@ namespace Prometeo.Planner.Console
                 NotifyPropertyChanged("AreaIsGood");
                 NotifyPropertyChanged("FireAlert");
             }
-            else if(Flights.Any())
+            else if (Flights.Any())
             {
                 AreaIsGood = Visibility.Visible;
                 FireAlert = Visibility.Collapsed;
                 NotifyPropertyChanged("AreaIsGood");
                 NotifyPropertyChanged("FireAlert");
             }
+
+            BmpPlanner.Children.Add(labelLayer);
+
+        }
+
+        private int RenderMap(MapModel mapModel, MapLayer labelLayer, string pinToolTipText, ControlTemplate pushpinTemplate)
+        {
+            foreach (var polygon in mapModel.Polygons)
+            {
+                BmpPlanner.Children.Add(polygon);
+                //labelLayer.AddChild(AddLabelInMap(polygon.CoveredArea().ToString("n2") + " m2"), polygon.CenterPosition());
+            }
+
+            int index = 0;
+            foreach (var loc in mapModel.Marks)
+            {
+                var pin = new Pushpin();
+                if (pushpinTemplate != null)
+                    pin.Template = pushpinTemplate;
+                if (!string.IsNullOrEmpty(loc.ImagePath))
+                    pin.MouseDown += (sender, e) => Pin_MouseDown(loc, e);
+                pin.Location = loc;
+                pin.ToolTip = pinToolTipText;
+                pin.Content = ++index;
+                BmpPlanner.Children.Add(pin);
+            }
+
+            return index;
         }
 
         private void Pin_MouseDown(object sender, MouseButtonEventArgs e)
@@ -244,8 +253,16 @@ namespace Prometeo.Planner.Console
 
             var location = (LocationMark)sender;
 
-            var wdw = new FireViewer(location.ImagePath, location.DetectionResults, location.Longitude, location.Latitude);
-            wdw.ShowDialog();
+            switch (FireViewer.ViewFire(location.ImagePath, location.DetectionResults, location.Longitude, location.Latitude))
+            {
+                case UserFeedbackAction.Alert:
+                    MessageBox.Show("Your team has been notified about it. Coordinates of the fire were included", "Notified", MessageBoxButton.OK, MessageBoxImage.Information);
+                    break;
+                case UserFeedbackAction.NoFire:
+                    Flights.RemoveMark(location);
+                    RenderMap();
+                    break;
+            }
         }
 
         private Label AddLabelInMap(string text)
@@ -261,24 +278,28 @@ namespace Prometeo.Planner.Console
 
         private void CmdEndPolygonDrawing_Execute(object obj)
         {
-            if (MapModel.IsCurrentlyDrawing)
+            if (_draftMapModel.IsCurrentlyDrawing)
             {
-                var pol = MapModel.FinishCurrentPolygon();
+                var pol = _draftMapModel.FinishCurrentPolygon();
 
                 BmpPlanner.MouseDown -= BmpPlanner_MouseDown;
                 BmpPlanner.MouseMove -= BmpPlanner_MouseMove;
 
                 DrawingRequested = false;
                 NotifyPropertyChanged("DrawingRequested");
+                NotifyPropertyChanged("DrawingHelpVisible");
 
                 AreasOfInterest.Add(new AreaOfInterest()
                 {
                     AnalizedArea = 0,
                     Area = pol.CoveredArea(),
                     RequiredFlightTime = 0,
-                    RequiredImages = 0
+                    RequiredImages = 0,
+                    MapModel = _draftMapModel
                 });
                 NotifyPropertyChanged("AreasOfInterest");
+
+                _draftMapModel = null;
 
                 RenderMap();
             }
@@ -286,19 +307,19 @@ namespace Prometeo.Planner.Console
 
         private void BmpPlanner_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!MapModel.IsCurrentlyDrawing)
+            if (!_draftMapModel.IsCurrentlyDrawing)
             {
-                MapModel.StartNewPolygon();
+                _draftMapModel.StartNewPolygon();
                 BmpPlanner.MouseMove += BmpPlanner_MouseMove;
             }
 
-            MapModel.AddPointToPolygon(e.GetPosition(BmpPlanner));
+            _draftMapModel.AddPointToPolygon(e.GetPosition(BmpPlanner));
             RenderMap();
         }
 
         private void BmpPlanner_MouseMove(object sender, MouseEventArgs e)
         {
-            MapModel.AddDraftPointToPolygon(e.GetPosition(BmpPlanner));
+            _draftMapModel.AddDraftPointToPolygon(e.GetPosition(BmpPlanner));
             RenderMap();
         }
 

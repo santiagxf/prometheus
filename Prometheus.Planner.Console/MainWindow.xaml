@@ -18,6 +18,19 @@
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage Header="Prometheus" Width="85">
                     <Fluent:BackstageTabControl>
+                        <Fluent:BackstageTabItem Header="About Prometheus ">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" TextBlock.FontSize="14">
+                                <Image Source="Img/prometheus-red.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10, 0, 0" Height="100" />
+                                <Label Style="{StaticResource BlueH1}" Margin="34,10,0,0" Content="About the project"/>
+                                <TextBlock Foreground="Black" Margin="40, 10, 40, 0" TextWrapping="Wrap"><Run Text="An early fire detection AI technology using drones. Named after Prometheus, the Greek Titan, who defies the gods by stealing fire and giving it to humanity, an act that enabled progress and civilization. We are itching to do the same" /></TextBlock>
+                                <TextBlock Foreground="Black" Margin="40, 10, 40, 0" TextWrapping="Wrap"><Run Text="We combine surveillance drones and concepts of machine learning to detect wildfires while they are still in their early stages. The concept is to leverage the vast amounts of wildfire images and videos available on the internet to train a deep learning neural network to detect the presence of a fire, however small it may be. The drone would then fly over parks and forests collecting the images and an algorithm  will determine the confidence level at which it believes a region is about to develop a fire." /></TextBlock>
+
+                                <Label Style="{StaticResource BlueH1}" Margin="34,30,0,0" Content="Prometheus is possible thank to"/>
+
+                                <Label Style="{StaticResource BlueH1}" Margin="34,30,0,0" Content="Technologies we use"/>
+                                
+                            </StackPanel>
+                        </Fluent:BackstageTabItem>
                         <Fluent:Button Header="Close" Command="{Binding CmdClose}" />
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
@@ -33,11 +46,11 @@
                 <Fluent:RibbonGroupBox Header="Fire detection">
                     <Fluent:Button Header="Analyze new flight" Size="Large" Command="{Binding CmdAnalizeNow}" LargeIcon="/Prometheus.Planner.Console;component/Img\Run.png" />
                     <Fluent:RibbonGroupBox Height="75" />
-                    <Fluent:Button Header="Save results" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Save.png" />
+                    <Fluent:Button Header="Save results" IsEnabled="False" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Save.png" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Alerts and settings">
                     <Fluent:Button Header="My group" Size="Large" Command="{Binding CmdAlertGroups}" LargeIcon="/Prometheus.Planner.Console;component/Img\Group.png" />
-                    <Fluent:Button Header="Settings" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\Configure.png" />
+                    <Fluent:Button Header="Settings" Size="Large" Command="{Binding CmdConfig}" LargeIcon="/Prometheus.Planner.Console;component/Img\Configure.png" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
@@ -45,14 +58,19 @@
             <StackPanel.InputBindings>
                 <MouseBinding MouseAction="LeftClick" Command="{Binding CmdNotificationOpened}" />
             </StackPanel.InputBindings>
+            <Border Visibility="{Binding DrawingHelpVisible}" Background="{StaticResource AccentBlue}" BorderBrush="{StaticResource BlueTheme}" BorderThickness="1" Padding="10,2">
+                <Grid>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Click all the points that contain the area under review: "/><Run Text="When you are finished, press escape." /></TextBlock>
+                </Grid>
+            </Border>
             <Border Visibility="{Binding AreaIsGood}" Background="#FF95D889" BorderBrush="#FF549D47" BorderThickness="1" Padding="10,2">
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The flight data doesn't contain any hit of a fire being developed. Check the map to see the area covered in the flight." /></TextBlock>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The analized area seems to be safe. Check the map to see the area covered in the flight." /></TextBlock>
                 </Grid>
             </Border>
             <Border Visibility="{Binding FireAlert }" Background="IndianRed" BorderBrush="DarkRed" BorderThickness="1" Padding="10,2">
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="We detected potencial fires under development in the are. Map has been moved to the first location with a fire detected. Explore the area." /></TextBlock>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="Map moved to the affected area" /></TextBlock>
                 </Grid>
             </Border>
         </StackPanel>

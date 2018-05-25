@@ -7,6 +7,27 @@
     <SolidColorBrush x:Key="LightBlue" Color="#192B579A"/>
     <SolidColorBrush x:Key="GrayTheme" Color="#FF444444" />
 
+    <ControlTemplate x:Key="RedFlagPushPinTemplate">
+        <Grid>
+            <Ellipse Width="32" Height="32">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Prometheus.Planner.Console;component/Img\RedFlag.png" />
+                </Ellipse.Fill>
+            </Ellipse>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="FirePushPinTemplate">
+        <Grid>
+            <Ellipse Width="32" Height="32" Stroke="Black" StrokeThickness="1" Fill="White" />
+            <Ellipse Width="32" Height="32">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
+                </Ellipse.Fill>
+            </Ellipse>
+        </Grid>
+    </ControlTemplate>
+
     <Style x:Key="BlueNotesText" TargetType="{x:Type TextBlock}">
         <Setter Property="Padding" Value="5" />
         <Setter Property="FontSize" Value="15" />

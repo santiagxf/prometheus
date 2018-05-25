@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         mc:Ignorable="d"
-        Title="Analyzing images" Height="204.571" Width="515" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+        Style="{StaticResource BlueThemeStandardWindows}"
+        Title="Analyzing flight" Height="204.571" Width="515" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Grid>
         <Label Style="{StaticResource BlueH1}" Margin="10,10,0,0">
-            Analizing images
+            Analizing flight
         </Label>
-        <Button Command="{Binding CmdCancel}" Content="Cancel" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,23,19" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
+        <Button Command="{Binding CmdCancel}" Content="Cancel" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,23,15" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Label Margin="10,44,0,0" Content="This may take a while" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <ProgressBar Height="21" Margin="15,85,23,0" VerticalAlignment="Top" Value="{Binding CurrentProgress}" />
-        <Label Margin="10,106,0,0" Content="{Binding CurrentStatus}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label Margin="10,128,0,0" Content="{Binding CurrentStatus}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </Window>

@@ -24,7 +24,7 @@ namespace Prometeo.Planner.Console
     {
         public ApplicationCommand CmdAccept { get; set; }
         public ApplicationCommand CmdCancel { get; set; }
-        public string Name { get; set; }
+        public string SubscriberName { get; set; }
         public string Phone { get; set; }
         public Subscribe()
         {
@@ -42,7 +42,7 @@ namespace Prometeo.Planner.Console
 
         private void CmdAccept_Execute(object obj)
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Phone))
+            if (string.IsNullOrEmpty(SubscriberName) || string.IsNullOrEmpty(Phone))
                 return;
 
             this.Hide();
@@ -53,10 +53,10 @@ namespace Prometeo.Planner.Console
             var wdw = new Subscribe();
             wdw.ShowDialog();
 
-            if (string.IsNullOrEmpty(wdw.Name) || string.IsNullOrEmpty(wdw.Phone))
+            if (string.IsNullOrEmpty(wdw.SubscriberName) || string.IsNullOrEmpty(wdw.Phone))
                 return false;
 
-            var result = RESTTools.SimpleURLRequest(ConfigurationManager.AppSettings["subscribeNumberToGroupAlert"].ToString(), wdw.Name, wdw.Phone, group);
+            var result = RESTTools.SimpleGet(ConfigurationManager.AppSettings["subscribeNumberToGroupAlert"].ToString(), wdw.SubscriberName, wdw.Phone, group);
             wdw.Close();
 
             return result;

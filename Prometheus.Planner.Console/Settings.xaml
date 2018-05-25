@@ -4,15 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="Settings" Height="470" Width="651">
+        Title="Settings" Height="526.714" Width="520.714" Style="{StaticResource BlueThemeStandardWindows}">
     <Grid>
         <Label Style="{StaticResource BlueH1}" Margin="10,10,0,0" Content="Configure Prometheus"/>
         <Label Margin="10,73,0,0" Content="Sensitivity" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <Button Command="{Binding CmdOk}" Content="Save" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,136,19" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Button Command="{Binding CmdCancel}" Content="Cancel" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,21,19" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
-        <Slider HorizontalAlignment="Left" Margin="97,78,0,0" VerticalAlignment="Top" Width="484" Maximum="1" Minimum="0.5" LargeChange="0.1" SmallChange="0.05"/>
-        <Label Margin="10,115,0,0" Content="Partition/subscription" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-
+        <Slider Name="SldSensitivity" Value="{Binding Sensitivity}" Margin="140,78,64.143,0" VerticalAlignment="Top" Maximum="1" Minimum="0" LargeChange="0.1" SmallChange="0.05"/>
+        <Label Content="{Binding ElementName=SldSensitivity, Path=Value}" Height="30" Margin="0,73,26.143,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="31"/>
+        <Label Content="Less sensitive" HorizontalAlignment="Left" Height="30" Margin="134,97,0,0" VerticalAlignment="Top" />
+        <Label Content="More sensitive" Height="30" Margin="0,96,64.143,0" VerticalAlignment="Top" HorizontalAlignment="Right" />
+        <Label Margin="10,142,0,0" Content="Scoring batch size" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Slider x:Name="SldBatchSize" Value="{Binding BatchSize}" Margin="140,147,64.143,0" VerticalAlignment="Top" Maximum="20" Minimum="1" LargeChange="5" SmallChange="1"/>
+        <Label Content="{Binding Value, ElementName=SldBatchSize}" Height="30" Margin="0,142,26.143,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="31"/>
+        <Label Content="Works better in unreliable networks" HorizontalAlignment="Left" Height="30" Margin="133,167,0,0" VerticalAlignment="Top" />
+        <Label Content="Works faster" Height="30" Margin="0,165,65.143,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" />
+        <Label Style="{StaticResource BlueH1}" Margin="10,274,0,0" Content="Tell us about your drone"/>
+        <Label Margin="10,325,0,0" Content="Flying altitude" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding FlyingAltitude}" VerticalAlignment="Top" Width="120" Margin="140,328,0,0"/>
+        <Label Margin="10,355,0,0" Content="Average flying speed" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding AverageFlyingSpeed}" VerticalAlignment="Top" Width="120" Margin="140,358,0,0"/>
+        <Label Margin="10,386,0,0" Content="Camera angle" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding CameraAngle}" VerticalAlignment="Top" Width="120" Margin="140,388,0,0"/>
+        <Label Margin="10,212,0,0" Content="Imagine resizing" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Slider x:Name="SldResize" Value="{Binding ResizeFactor}" Margin="141,213,62.857,0" VerticalAlignment="Top" Maximum="1" Minimum="0.1" LargeChange="0.01" SmallChange="0.005"/>
+        <Label Content="{Binding Value, ElementName=SldResize}" Height="30" Margin="0,208,25.857,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="31"/>
+        <Label Content="Resize, faster, less sensible" HorizontalAlignment="Left" Height="30" Margin="134,233,0,0" VerticalAlignment="Top" />
+        <Label Content="Don't resize" Height="30" Margin="0,231,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="141" />
     </Grid>
 </Window>

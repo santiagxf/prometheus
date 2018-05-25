@@ -104,7 +104,7 @@ __C.TRAIN.RPN_MIN_SIZE = 16
 # Detector parameters
 # Minibatch size (number of regions of interest [ROIs]) -- was: __C.TRAIN.BATCH_SIZE = 128
 __C.NUM_ROI_PROPOSALS = 128
-# Fraction of minibatch that is labeled foreground (i.e. class > 0)
+# Fraction of minibatch that is labeled foreground (i.e. class > 0) 0.25
 __C.TRAIN.FG_FRACTION = 0.25
 # Overlap threshold for a ROI to be considered foreground (if >= FG_THRESH)
 __C.TRAIN.FG_THRESH = 0.5

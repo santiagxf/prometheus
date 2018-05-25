@@ -31,35 +31,34 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdActivated { get; set; }
         public ApplicationCommand CmdAdd { get; set; }
         public ApplicationCommand CmdRemove { get; set; }
+        public ApplicationCommand CmdCancel { get; set; }
         public List<AlertGroups> AllMembers { get; set; }
         public AlertGroups SelectedMember { get; set; }
+        public Visibility AllMembersVisibility { get; set; }
+
+        BackgroundWorker _worker;
         public AlertGroup()
         {
             InitializeComponent();
             DataContext = this;
 
-            CmdActivated = new ApplicationCommand(CmdActivated_Execute);
             CmdAdd = new ApplicationCommand(CmdAdd_Execute);
             CmdRemove = new ApplicationCommand(CmdRemove_Execute);
-            CmdActivated_Execute(null);
+            CmdCancel = new ApplicationCommand(CmdCancel_Execute);
+
+            _worker = new BackgroundWorker();
+            _worker.DoWork += worker_DoWork;
+            _worker.RunWorkerCompleted += worker_RunWorkerCompleted;
         }
 
-        private void CmdRemove_Execute(object obj)
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (SelectedMember != null)
-                if (RESTTools.SimpleURLRequest(ConfigurationManager.AppSettings["unsubscribeNumberToGroupAlert"].ToString(), SelectedMember.RowKey))
-                    CmdActivated_Execute(null);
+            AllMembersVisibility = Visibility.Visible;
+            NotifyPropertyChanged("AllMembersVisibility");
+            NotifyPropertyChanged("AllMembers");
         }
 
-        private void CmdAdd_Execute(object obj)
-        {
-            var partition = ConfigurationManager.AppSettings["subscribePartition"].ToString();
-
-            if (Subscribe.AddNewUserToGroup(partition))
-                CmdActivated_Execute(null);
-        }
-
-        private void CmdActivated_Execute(object obj)
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             List<AlertGroups> blogs = new List<AlertGroups>();
 
@@ -73,8 +72,35 @@ namespace Prometeo.Planner.Console
                 AllMembers = alertsTable.ExecuteQuery(query).ToList();
             }
             catch { }
+        }
 
-            NotifyPropertyChanged("AllMembers");
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            AllMembersVisibility = Visibility.Hidden;
+            NotifyPropertyChanged("AllMembersVisibility");
+
+            if (!_worker.IsBusy)
+                _worker.RunWorkerAsync();
+        }
+
+        private void CmdCancel_Execute(object obj)
+        {
+            Close();
+        }
+
+        private void CmdRemove_Execute(object obj)
+        {
+            if (SelectedMember != null)
+                if (RESTTools.SimpleGet(ConfigurationManager.AppSettings["unsubscribeNumberToGroupAlert"].ToString(), SelectedMember.RowKey))
+                    Window_Activated(null, null);
+        }
+
+        private void CmdAdd_Execute(object obj)
+        {
+            var partition = ConfigurationManager.AppSettings["subscribePartition"].ToString();
+
+            if (Subscribe.AddNewUserToGroup(partition))
+                Window_Activated(null, null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

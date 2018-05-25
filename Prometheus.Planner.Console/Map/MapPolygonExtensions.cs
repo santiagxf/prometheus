@@ -4,11 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Prometeo.Planner.Console.Map
 {
     public static class MapPolygonExtensions
     {
+        public static readonly SolidColorBrush RED_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0xCD, 0x5C, 0x5C));
+        public static readonly SolidColorBrush RED_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0xCD, 0x5C, 0x5C));
+        public static readonly SolidColorBrush GREEN_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
+        public static readonly SolidColorBrush GREEN_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x64, 0x00));
+        public static readonly SolidColorBrush INTEREST_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
+        public static readonly SolidColorBrush INTEREST_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
+        public static readonly SolidColorBrush REDFLAG_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0xFF, 0x99, 0x00));
+        public static readonly SolidColorBrush REDFLAG_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0xFF, 0x99, 0x00));
+
         public static double CoveredArea(this MapPolygon mp)
         {
             double sum = 0;
