@@ -1,4 +1,9 @@
 # Project Prometheus
+<style>
+	.markdown-body table th, .markdown-body table td{
+		border:none !important;
+	}
+</style>
 
 <p>Prometheus is an early fire detection artificial intelligence technology using drones. Named after Prometheus, the Greek Titan, who defies the gods by stealing fire and giving it to humanity, an act that enabled progress and civilization. We are itching to do the same.</p>
 
@@ -10,10 +15,10 @@ Prometheus is a joint efford of
 </h2>
 <table>
     <tr style="border-top:none;">
-        <td align="center" width="140" style="border:none;"><img src='doc/asu.png' width='120'/><div style='word-wrap: break-word;width:120px'>Arizona State University</div></td>
-        <td align="center" width="140" style="border:none;"><img src='doc/bomberos.png' width='110'/><div style='word-wrap: break-word;width:140px'>Bomberos Voluntarios República Argentina</div></td>
-        <td align="center" width="140" style="border:none;"><img src='doc/noaa.png' width='120'/><div style='word-wrap: break-word;width:120px'>National Weather Service</div></td>
-        <td align="center" width="140" style="border:none;"><img src='doc/tempe.png' width='105'/><div style='word-wrap: break-word;width:120px'>Tempe Fire Department</div></td>
+        <td align="center" width="190" style="border:none;"><img src='doc/asu.png' width='120'/><div style='word-wrap: break-word;width:120px'>Arizona State University</div></td>
+        <td align="center" width="190" style="border:none;"><img src='doc/bomberos.png' width='110'/><div style='word-wrap: break-word;width:140px'>Bomberos Voluntarios República Argentina</div></td>
+        <td align="center" width="190" style="border:none;"><img src='doc/noaa.png' width='120'/><div style='word-wrap: break-word;width:120px'>National Weather Service</div></td>
+        <td align="center" width="190" style="border:none;"><img src='doc/tempe.png' width='105'/><div style='word-wrap: break-word;width:120px'>Tempe Fire Department</div></td>
     </tr>
 </table>
 
