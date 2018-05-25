@@ -1,9 +1,4 @@
 # Project Prometheus
-<style>
-	.markdown-body table th, .markdown-body table td{
-		border:none !important;
-	}
-</style>
 
 <p>Prometheus is an early fire detection artificial intelligence technology using drones. Named after Prometheus, the Greek Titan, who defies the gods by stealing fire and giving it to humanity, an act that enabled progress and civilization. We are itching to do the same.</p>
 
@@ -13,25 +8,23 @@
 <h2>
 Prometheus is a joint efford of
 </h2>
-<table>
-    <tr style="border-top:none;">
-        <td align="center" width="190" style="border:none;"><img src='doc/asu.png' width='120'/><div style='word-wrap: break-word;width:120px'>Arizona State University</div></td>
-        <td align="center" width="190" style="border:none;"><img src='doc/bomberos.png' width='110'/><div style='word-wrap: break-word;width:140px'>Bomberos Voluntarios República Argentina</div></td>
-        <td align="center" width="190" style="border:none;"><img src='doc/noaa.png' width='120'/><div style='word-wrap: break-word;width:120px'>National Weather Service</div></td>
-        <td align="center" width="190" style="border:none;"><img src='doc/tempe.png' width='105'/><div style='word-wrap: break-word;width:120px'>Tempe Fire Department</div></td>
-    </tr>
-</table>
+<div>
+    <div style="float:left; text-align:center;padding:8px;" width="190"><img src='doc/asu.png' width='120'/><div style='word-wrap: break-word;width:120px'>Arizona State University</div></div>
+    <div style="float:left; text-align:center;padding:15px;" width="190"><img src='doc/bomberos.png' width='110'/><div style='word-wrap: break-word;width:140px'>Bomberos Voluntarios República Argentina</div></div>
+    <div style="float:left; text-align:center;padding:8px;" width="190"><img src='doc/noaa.png' width='120'/><div style='word-wrap: break-word;width:120px'>National Weather Service</div></div>
+    <div style="float:left; text-align:center;padding:15px;" width="190"><img src='doc/tempe.png' width='105'/><div style='word-wrap: break-word;width:120px'>Tempe Fire Department</div></div>
+    <div style="clear:both"></div>
+</div>
 
 <h3>
     Dreamt and built by people from
 </h3>
-<table>
-    <tr>
-        <td align="center"><img src='doc/ar.png' width='80'/><div style='word-wrap: break-word;width:90px'>Argentina</div></td>
-        <td align="center"><img src='doc/ir.png' width='80'/><div style='word-wrap: break-word;width:90px'>Irland</div></td>
-        <td align="center"><img src='doc/us.png' width='80'/><div style='word-wrap: break-word;width:90px'>United States</div></td>
-    </tr>
-</table>
+<div>
+    <div style="float:left; text-align:center;padding:8px;"><img src='doc/ar.png' width='80'/><div style='word-wrap: break-word;width:90px'>Argentina</div></div>
+    <div style="float:left; text-align:center;padding:8px;"><img src='doc/ir.png' width='80'/><div style='word-wrap: break-word;width:90px'>Irland</div></div>
+    <div style="float:left; text-align:center;padding:8px;"><img src='doc/us.png' width='80'/><div style='word-wrap: break-word;width:90px'>United States</div></div>
+    <div style="clear:both"></div>
+</div>
 
 <h2>
 Technologies
