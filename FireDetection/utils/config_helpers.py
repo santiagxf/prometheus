@@ -1,5 +1,17 @@
 from easydict import EasyDict
 
+def setConfigurationByNamespace(cfg, namespaceKey, value):
+    print('Setting key', namespaceKey, 'with value', value)
+    
+    names = namespaceKey.split('.')
+    configKey = cfg
+
+    for name in names:
+        if namespaceKey.endswith(name) == False:
+            configKey = cfg[name]
+    
+    configKey[names[-1]] = value
+
 def merge_configs(config_list):
     if config_list == None or len(config_list) == 0:
         return None

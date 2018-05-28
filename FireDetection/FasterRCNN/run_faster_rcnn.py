@@ -4,13 +4,17 @@
 # for full license information.
 # ==============================================================================
 
-import os
+import os, sys
 import numpy as np
 import cntk
 from FasterRCNN_train import prepare, train_faster_rcnn, store_eval_model_with_native_udf
 from FasterRCNN_eval import compute_test_set_aps, FasterRCNN_Evaluator
-from utils.config_helpers import merge_configs
+from utils.config_helpers import merge_configs, setConfigurationByNamespace
 from utils.plot_helpers import plot_test_set_results
+
+def checkForConfigurationArguments(cfg):
+    for i in range(1, len(sys.argv), 2):
+        setConfigurationByNamespace(cfg, sys.argv[i], float(sys.argv[i + 1]))
 
 def get_configuration():
     # load configs for detector, base network and data set
@@ -27,6 +31,9 @@ def get_configuration():
 # trains and evaluates a Fast R-CNN model.
 if __name__ == '__main__':
     cfg = get_configuration()
+
+    checkForConfigurationArguments(cfg)
+
     prepare(cfg, False)
     cntk.device.try_set_default_device(cntk.device.gpu(cfg.GPU_ID))
 
