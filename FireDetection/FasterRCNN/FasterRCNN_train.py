@@ -11,13 +11,13 @@ import argparse
 import easydict # pip install easydict
 import cntk
 from cntk import Trainer, load_model, Axis, input_variable, parameter, times, combine, \
-    softmax, roipooling, plus, element_times, CloneMethod, alias, Communicator, reduce_sum
+    softmax, roipooling, plus, element_times, CloneMethod, alias, Communicator, reduce_sum, reduce_mean
 from cntk.core import Value
 from cntk.io import MinibatchData
 from cntk.initializer import normal
 from cntk.layers import placeholder, Constant, Sequential
 from cntk.learners import momentum_sgd, learning_parameter_schedule_per_sample, momentum_schedule
-from cntk.logging import log_number_of_parameters, ProgressPrinter
+from cntk.logging import log_number_of_parameters, ProgressPrinter, TensorBoardProgressWriter
 from cntk.logging.graph import find_by_name, plot
 from cntk.losses import cross_entropy_with_softmax
 from cntk.metrics import classification_error
@@ -31,6 +31,8 @@ from utils.od_mb_source import ObjectDetectionMinibatchSource
 from utils.proposal_helpers import ProposalProvider
 from FastRCNN.FastRCNN_train import clone_model, clone_conv_layers, create_fast_rcnn_predictor, \
     create_detection_losses
+
+import tensorboard
 
 def prepare(cfg, use_arg_parser=True, outputPath = os.path.join(abs_path, "Output")):
     cfg.MB_SIZE = 1
@@ -562,16 +564,30 @@ def train_model(image_input, roi_input, dims_input, loss, pred_error,
     else:
         input_map[od_minibatch_source.dims_si] = dims_input
 
-    progress_printer = ProgressPrinter(tag='Training', num_epochs=epochs_to_train, gen_heartbeat=True)
+    progress_printer = [ProgressPrinter(tag='Training', num_epochs=epochs_to_train, gen_heartbeat=True)]
+    tensorboard_logdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"./TensorBoard")
+    tensorboard_writer = None
+    if tensorboard_logdir is not None:
+        tensorboard_writer = TensorBoardProgressWriter(freq=10, log_dir=tensorboard_logdir, model=loss)
+        progress_printer.append(tensorboard_writer)
+    
     for epoch in range(epochs_to_train):       # loop over epochs
         sample_count = 0
         while sample_count < cfg["DATA"].NUM_TRAIN_IMAGES:  # loop over minibatches in the epoch
             data = od_minibatch_source.next_minibatch(min(cfg.MB_SIZE, cfg["DATA"].NUM_TRAIN_IMAGES-sample_count), input_map=input_map)
-            trainer.train_minibatch(data)                                    # update model with it
+            output = trainer.train_minibatch(data, outputs=[image_input])                                    # update model with it
             sample_count += trainer.previous_minibatch_sample_count          # count samples processed so far
-            progress_printer.update_with_trainer(trainer, with_metric=True)  # log progress
+            
+            #progress_printer.update_with_trainer(trainer, with_metric=True)  # log progress
+            #Write output images to tensorboard
+            tensorboard_writer.write_image('training', output[1], sample_count)
+
             if sample_count % 100 == 0:
                 print("Processed {} samples".format(sample_count))
 
-        progress_printer.epoch_summary(with_metric=True)
+        #progress_printer.epoch_summary(with_metric=True)
+        trainer.summarize_training_progress()
 
+        if tensorboard_writer:
+            for parameter in loss.parameters:
+                tensorboard_writer.write_value(parameter.uid + "/mean", reduce_mean(parameter).eval(), epoch)

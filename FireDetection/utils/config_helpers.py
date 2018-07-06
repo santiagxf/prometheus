@@ -1,8 +1,9 @@
 from easydict import EasyDict
+import numpy as np
 
 def setConfigurationByNamespace(cfg, namespaceKey, value):
     print('Setting key', namespaceKey, 'with value', value)
-    
+
     names = namespaceKey.split('.')
     configKey = cfg
 
