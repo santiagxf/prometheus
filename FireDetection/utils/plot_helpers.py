@@ -130,6 +130,72 @@ def visualize_detections(img_path, roi_coords, roi_labels, roi_scores,
                 result_img = drawText(result_img, (rect[0],rect[1]), text, color = (255,255,255), font = font, colorBackground=color)
     return result_img
 
+def visualize_detections_raw(cv_img, roi_coords, roi_labels, roi_scores,
+                         pad_width, pad_height, classes,
+                         draw_negative_rois = False, decision_threshold = 0.0):
+    # read and resize image
+    imgHeight, imgWidth, chnnls = cv_img.shape
+    scale = 800.0 / max(imgWidth, imgHeight)
+    imgHeight = int(imgHeight * scale)
+    imgWidth = int(imgWidth * scale)
+    if imgWidth > imgHeight:
+        h_border = 0
+        v_border = int((imgWidth - imgHeight)/2)
+    else:
+        h_border = int((imgHeight - imgWidth)/2)
+        v_border = 0
+
+    PAD_COLOR = [103, 116, 123] # [114, 114, 114]
+    resized = cv2.resize(cv_img, (imgWidth, imgHeight), interpolation=cv2.INTER_NEAREST)
+    result_img = cv2.copyMakeBorder(resized,v_border,v_border,h_border,h_border,cv2.BORDER_CONSTANT,value=PAD_COLOR)
+    rect_scale = 800 / pad_width
+
+    assert(len(roi_labels) == len(roi_coords))
+    if roi_scores is not None:
+        assert(len(roi_labels) == len(roi_scores))
+        minScore = min(roi_scores)
+        if minScore > decision_threshold:
+            decision_threshold = minScore * 0.5
+
+    # draw multiple times to avoid occlusions
+    for iter in range(0,3):
+        for roiIndex in range(len(roi_coords)):
+            label = roi_labels[roiIndex]
+            if roi_scores is not None:
+                score = roi_scores[roiIndex]
+                if decision_threshold and score < decision_threshold:
+                    label = 0
+
+            # init drawing parameters
+            thickness = 1
+            if label == 0:
+                color = (255, 0, 0)
+            else:
+                color = getColorsPalette()[label]
+
+            rect = [(rect_scale * i) for i in roi_coords[roiIndex]]
+            rect[0] = int(max(0, min(pad_width, rect[0])))
+            rect[1] = int(max(0, min(pad_height, rect[1])))
+            rect[2] = int(max(0, min(pad_width, rect[2])))
+            rect[3] = int(max(0, min(pad_height, rect[3])))
+
+            # draw in higher iterations only the detections
+            if iter == 0 and draw_negative_rois:
+                drawRectangles(result_img, [rect], color=color, thickness=thickness)
+            elif iter==1 and label > 0:
+                thickness = 4
+                drawRectangles(result_img, [rect], color=color, thickness=thickness)
+            elif iter == 2 and label > 0:
+                try:
+                    font = ImageFont.truetype(available_font, 18)
+                except:
+                    font = ImageFont.load_default()
+                text = classes[label]
+                if roi_scores is not None:
+                    text += "(" + str(round(score, 2)) + ")"
+                result_img = drawText(result_img, (rect[0],rect[1]), text, color = (255,255,255), font = font, colorBackground=color)
+    return result_img
+
 def plot_test_set_results(evaluator, num_images_to_plot, results_base_path, cfg):
     from matplotlib.pyplot import imsave
 

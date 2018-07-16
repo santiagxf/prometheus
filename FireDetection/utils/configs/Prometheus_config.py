@@ -19,7 +19,7 @@ __C.DATA.TRAIN_MAP_FILE = "train_img_file.txt"
 __C.DATA.TRAIN_ROI_FILE = "train_roi_file.txt"
 __C.DATA.TEST_MAP_FILE = "test_img_file.txt"
 __C.DATA.TEST_ROI_FILE = "test_roi_file.txt"
-__C.DATA.NUM_TRAIN_IMAGES = 85
+__C.DATA.NUM_TRAIN_IMAGES = 348
 __C.DATA.NUM_TEST_IMAGES = 22
 __C.DATA.PROPOSAL_LAYER_SCALES = [4, 8, 12]
 

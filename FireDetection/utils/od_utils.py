@@ -87,6 +87,7 @@ def evaluate_single_image(model, img_path, cfg):
 
     return regressed_rois, cls_probs
 
+
 def filter_results(regressed_rois, cls_probs, cfg):
     """
     Filters the provided results by performing NMS (non maximum suppression)
