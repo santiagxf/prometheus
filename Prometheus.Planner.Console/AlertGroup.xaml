@@ -7,25 +7,39 @@
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         mc:Ignorable="d"
         Activated="Window_Activated"
-        Style="{StaticResource BlueThemeStandardWindows}"
+        Style="{StaticResource DarkWindow}"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         WindowStartupLocation="CenterScreen"
-        Title="Alerts and notifications group" Height="450" Width="800">
+        Title="Alerts and notifications group" Height="354.572" Width="800">
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Fluent:Ribbon x:Name="rbMainUI" VerticalAlignment="Top" DockPanel.Dock="Top">
-            <Fluent:RibbonTabItem Header="Alerts and notifications group" IsSelected="True" >
-                <Fluent:RibbonGroupBox Header="Manage">
-                    <Fluent:Button Header="Add new user" Command="{Binding CmdAdd}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\AddUser.png" />
-                    <Fluent:Button Header="Remove from notifications" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\Remove.png" Command="{Binding CmdRemove}" />
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
-        </Fluent:Ribbon>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="10,5">
+                <Button Command="{Binding CmdAdd}" Grid.Column="0" Content="ADD USER" Grid.Row="1" Style="{StaticResource DarkButtonSmall}">
+                    <Button.ContentTemplate>
+                        <ItemContainerTemplate>
+                            <StackPanel Margin="2">
+                                <Image Source="Img/Toolbar/add.png" Height="42" Width="42" />
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </ItemContainerTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button Command="{Binding CmdRemove}" Grid.Column="0" Content="REMOVE" Grid.Row="2" Style="{StaticResource DarkButtonSmall}">
+                    <Button.ContentTemplate>
+                        <ItemContainerTemplate>
+                            <StackPanel Margin="2">
+                                <Image Source="Img/Toolbar/remove.png" Height="42" Width="42" />
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </ItemContainerTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
         <Grid>
-            <Label Style="{StaticResource BlueH1}" Margin="10,8,0,0" Content="Alert my group"/>
-            <Button Content="Close" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource BlueButton}" Margin="0,0,18.286,15" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
-            <TextBlock Padding="5" TextWrapping="Wrap" Text="We can notify you team with a fire is located so then can act quickly on it. Notifications are send using standard SMS and we will sent the location of the inciden." Height="47" Margin="10,47,18,0" VerticalAlignment="Top"/>
-            <Label Style="{StaticResource BlueH1}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Loading group members"/>
-            <DataGrid ItemsSource="{Binding AllMembers}" SelectedItem="{Binding SelectedMember}" IsReadOnly="True" AutoGenerateColumns="False" Margin="14,99,18,62" Visibility="{Binding AllMembersVisibility}">
+            <Label Style="{StaticResource BlueDeamonText}" Margin="10,8,0,0" Content="ALERT MY GROUP"/>
+            <Button Content="Close" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource DarkButton}" Margin="0,0,18,-46.143" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
+            <TextBlock Padding="5" TextWrapping="Wrap" Text="We can notify you team when a fire is detected so then can act quickly on it. Notifications are sent using standard SMS and we will send the location of the incident." Height="47" Margin="10,47,18,0" VerticalAlignment="Top"/>
+            <Label Style="{StaticResource DarkDeamonText}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="LOADING GROUP MEMBERS"/>
+            <DataGrid ItemsSource="{Binding AllMembers}" SelectedItem="{Binding SelectedMember}" IsReadOnly="True" AutoGenerateColumns="False" Margin="15,99,18,9.857" Visibility="{Binding AllMembersVisibility}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
                     <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="300" />

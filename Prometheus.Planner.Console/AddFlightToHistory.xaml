@@ -1,18 +1,18 @@
-﻿<Window x:Class="Prometeo.Planner.Console.ResolveLocation"
+﻿<Window x:Class="Prometeo.Planner.Console.AddFlightToHistory"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         mc:Ignorable="d"
-        Title="Look for a location" Height="202.571" Width="591.429" WindowStartupLocation="CenterScreen" Style="{StaticResource DarkWindow}">
+        Title="Add a flight to history" Height="177.197" Width="591.429" WindowStartupLocation="CenterScreen" Style="{StaticResource DarkWindow}">
     <Grid>
         <Label x:Name="LblTitle" Style="{StaticResource BlueDeamonText}" Margin="10,10,0,0">
-            TELL US WHERE THIS PICTURES WERE TAKEN
+            GIVE THIS AREA A NAME
         </Label>
-        <TextBox Height="25" Margin="14,81,23.714,0" TextWrapping="Wrap" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+        <TextBox Height="25" Margin="14,81,23.714,0" TextWrapping="Wrap" Text="{Binding AreaName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
         <Button Content="Ok" Command="{Binding CmdAccept}" IsDefault="True" Style="{StaticResource DarkButton}" Margin="0,0,140.714,18.571" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Button Content="Cancel" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource DarkButton}" Margin="0,0,24.714,18.571" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
-        <Label x:Name="LblText" Content="We could find GPS location data in some of the pictures. Tell us where they were taken and we will add it." HorizontalAlignment="Left" Height="29" Margin="14,47,0,0" VerticalAlignment="Top" Width="548"/>
+        <Label x:Name="LblText" Content="Tell us a description of this area so you can find it easier." HorizontalAlignment="Left" Height="29" Margin="12,47,0,0" VerticalAlignment="Top" Width="548"/>
     </Grid>
 </Window>

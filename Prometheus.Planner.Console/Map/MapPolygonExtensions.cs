@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Prometeo.Planner.Console.Map
 {
@@ -15,6 +17,20 @@ namespace Prometeo.Planner.Console.Map
         public static readonly SolidColorBrush GREEN_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x64, 0x00));
         public static readonly SolidColorBrush GREEN_AREA_STROKE = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x64, 0x00));
         public static readonly SolidColorBrush INTEREST_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0x2B, 0x57, 0x9A));
+        //public static readonly VisualBrush INTEREST_AREA_SHADING = new VisualBrush()
+        //{
+        //    TileMode = TileMode.Tile,
+        //    Viewport = new Rect(0, 0, 10, 10),
+        //    ViewportUnits = BrushMappingMode.Absolute,
+        //    Viewbox = new Rect(0, 0, 12, 12),
+        //    ViewboxUnits = BrushMappingMode.Absolute,
+        //    Visual = new Ellipse()
+        //    {
+        //        Fill = new SolidColorBrush(Colors.White),
+        //        Width = 5,
+        //        Height = 5
+        //    }
+        //};
         public static readonly SolidColorBrush INTEREST_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0x2B, 0x57, 0x9A));
         public static readonly SolidColorBrush REDFLAG_AREA_SHADING = new SolidColorBrush(Color.FromArgb(0x50, 0xFF, 0x99, 0x00));
         public static readonly SolidColorBrush REDFLAG_AREA_STROKE = new SolidColorBrush(Color.FromRgb(0xFF, 0x99, 0x00));
@@ -56,7 +72,7 @@ namespace Prometeo.Planner.Console.Map
                 prevaz = az;
             }
             sum = sum + (1 - Math.Cos(prevcolat + (colat0 - prevcolat) / 2)) * (az0 - prevaz);
-            return 5.10072E14 * Math.Min(Math.Abs(sum) / 4 / Math.PI, 1 - Math.Abs(sum) / 4 / Math.PI);
+            return 5.10072E14 * Math.Min(Math.Abs(sum) / 4 / Math.PI, 1 - Math.Abs(sum) / 4 / Math.PI) / 4046.86; // To return in acres instead of mts2
         }
 
         public static Location CenterPosition(this MapPolygon mp)

@@ -29,6 +29,10 @@ namespace Prometeo.Planner.Console
     /// </summary>
     public partial class MainWindow : RibbonWindow,  INotifyPropertyChanged
     {
+        // OPTIONS
+        public bool RenderRedFlagAlerts { get; set; }
+        public bool RenderWeatherConditions { get; set; }
+
         public ApplicationCommand CmdEndPolygonDrawing { get; set; }
         public ApplicationCommand CmdStartPolygon { get; set; }
         public ApplicationCommand CmdCleanMap { get; set; }
@@ -37,14 +41,21 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdNotificationOpened { get; set; }
         public ApplicationCommand CmdAlertGroups { get; set; }
         public ApplicationCommand CmdConfig { get; set; }
+        public ApplicationCommand CmdSave { get; set; }
+        public ApplicationCommand OpenSavedAOI { get; set; }
+        public ApplicationCommand CmdDismissRedFlagNotifications { get; set; }
 
+
+        public AreasOfInterestCollection SavedAreasOfInterest { get; set; }
         public FlightCollection Flights { get; set; }
         public AreasOfInterestCollection AreasOfInterest { get; set; }
         public AreasOfInterestCollection RedFlagsNotifications { get; set; }
         public bool DrawingRequested { get; set; }
+        public Visibility AnyRedFlagsNotification { get; set; }
         public Visibility FireAlert { get; set; }
         public Visibility AreaIsGood { get; set; }
         public Visibility DrawingHelpVisible => DrawingRequested ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility AddToMyAreasVisibility { get; set; }
 
         MapModel _draftMapModel;
         
@@ -55,6 +66,9 @@ namespace Prometeo.Planner.Console
             InitializeComponent();
             DataContext = this;
 
+            RenderRedFlagAlerts = true;
+            RenderWeatherConditions = false;
+
             CmdEndPolygonDrawing = new ApplicationCommand(CmdEndPolygonDrawing_Execute);
             CmdStartPolygon = new ApplicationCommand(CmdStartPolygon_Execute);
             CmdCleanMap = new ApplicationCommand(CmdCleanMap_Execute);
@@ -63,10 +77,59 @@ namespace Prometeo.Planner.Console
             CmdNotificationOpened = new ApplicationCommand(CmdNotificationOpened_Execute);
             CmdAlertGroups = new ApplicationCommand(CmdAlertGroups_Execute);
             CmdConfig = new ApplicationCommand(CmdConfig_Execute);
+            CmdSave = new ApplicationCommand(CmdSave_Execute);
+            OpenSavedAOI = new ApplicationCommand(OpenSavedAOI_Execute);
+            CmdDismissRedFlagNotifications = new ApplicationCommand(CmdDismissRedFlagNotifications_Execute);
+
 
             Flights = new FlightCollection();
             RedFlagsNotifications = new AreasOfInterestCollection();
             AreasOfInterest = new AreasOfInterestCollection();
+            SavedAreasOfInterest = new AreasOfInterestCollection();
+
+            UpdateRedFlagNotifications(Settings.RED_FLAGS_COUNTRY_CODE);
+            CmdCleanMap_Execute(null);
+        }
+
+        private void OpenSavedAOI_Execute(object aoi)
+        {
+            if (aoi is AreaOfInterest aoiObj)
+            {
+                if (!AreasOfInterest.Any((a) => a.Name == aoiObj.Name))
+                {
+                    CmdCleanMap_Execute(null);
+                    AreasOfInterest.Add(aoiObj);
+                    Flights.AddRange(aoiObj.Flights);
+                }
+
+                NotifyPropertyChanged("AreasOfInterest");
+                NotifyPropertyChanged("Flights");
+                RenderMap();
+            }
+        }
+
+        private void CmdSave_Execute(object obj)
+        {
+            string name = AddFlightToHistory.PickUpName();
+            if (!string.IsNullOrEmpty(name))
+            {
+                var area = AreasOfInterest.First();
+                area.Name = name.ToUpper();
+
+                SavedAreasOfInterest.Add(area);
+                NotifyPropertyChanged("SavedAreasOfInterest");
+            }
+        }
+
+        private void CmdDismissRedFlagNotifications_Execute(object obj)
+        {
+            AnyRedFlagsNotification = Visibility.Collapsed;
+            NotifyPropertyChanged("AnyRedFlagsNotification");
+        }
+
+        private void UpdateRedFlagNotifications(string countryCode)
+        {
+            RedFlagsNotifications.Clear();
 
             var redFlags = new AreaOfInterest()
             {
@@ -76,40 +139,48 @@ namespace Prometeo.Planner.Console
                     Stroke = MapPolygonExtensions.REDFLAG_AREA_STROKE
                 }
             };
-            //redFlags.MapModel.Marks.AddRange(NationalWeatherService.ConvertUGCtoPosition(NationalWeatherService.QueryFireAlerts()));
-            NationalWeatherService.ConvertUGCtoPolygon(NationalWeatherService.QueryFireAlerts(), redFlags.MapModel);
-            RedFlagsNotifications.Add(redFlags);
 
-            FireAlert = Visibility.Collapsed;
-            AreaIsGood = Visibility.Collapsed;
+            switch (countryCode)
+            {
+                case "UNITED STATES":
+                    var fireAlerts = NationalWeatherService.QueryFireAlerts(NationalWeatherService.RED_FLAG_ALERT, countryCode);
+                    if (fireAlerts.Any())
+                        NationalWeatherService.ConvertUGCtoPolygon(fireAlerts, redFlags.MapModel);
+                    break;
+                case "ARGENTINA":
+                    NationalWeatherService.GetAllPolygonsFromShape(redFlags.MapModel, "ar");
+                    break;
+            }
 
-            RenderMap();
+            AnyRedFlagsNotification = redFlags.MapModel.Polygons.Any() ? Visibility.Visible : Visibility.Collapsed;
+            if (AnyRedFlagsNotification == Visibility.Visible)
+                RedFlagsNotifications.Add(redFlags);
+
+            NotifyPropertyChanged("AnyRedFlagsNotification");
+            NotifyPropertyChanged("RedFlagsNotifications");
         }
 
         private void CmdConfig_Execute(object obj)
         {
-            var wdw = new Settings();
-            wdw.ShowDialog();
+            (new Settings()).ShowDialog();
         }
 
         private void CmdAlertGroups_Execute(object obj)
         {
-            var wdw = new AlertGroup();
-            wdw.ShowDialog();
+            (new AlertGroup()).ShowDialog();
         }
 
         private void CmdNotificationOpened_Execute(object obj)
         {
-            throw new NotImplementedException();
+            FireAlert = Visibility.Collapsed;
+            NotifyPropertyChanged("FireAlert");
         }
 
         private void CmdMoveMap_Execute(object obj)
         {
             var pos = ResolveLocation.Resolve(false);
             if (pos != null)
-            {
                 BmpPlanner.SetView(new Location(pos[0], pos[1]), 10);
-            }
         }
 
         private void CmdAnalizeNow_Execute(object obj)
@@ -142,10 +213,9 @@ namespace Prometeo.Planner.Console
                 Flights.Add(flight);
                 NotifyPropertyChanged("Flights");
 
-                AreasOfInterest.AddToAnalizedArea(flight.CoveredArea);
+                AreasOfInterest.AddToAnalizedArea(flight);
                 AreasOfInterest.NotifyAllPropertyChanged("AnalizedAreaPercentage");
                 NotifyPropertyChanged("AreasOfInterest");
-                
 
                 wdw.Close();
                 RenderMap();
@@ -154,11 +224,20 @@ namespace Prometeo.Planner.Console
 
         private void CmdCleanMap_Execute(object obj)
         {
+            FireAlert = Visibility.Collapsed;
+            AreaIsGood = Visibility.Collapsed;
+
+            NotifyPropertyChanged("FireAlert");
+            NotifyPropertyChanged("AreaIsGood");
+
             Flights.Clear();
             AreasOfInterest.Clear();
 
             NotifyPropertyChanged("Flights");
             NotifyPropertyChanged("AreasOfInterest");
+
+            AddToMyAreasVisibility = Visibility.Hidden;
+            NotifyPropertyChanged("AddToMyAreasVisibility");
 
             RenderMap();
         }
@@ -183,6 +262,14 @@ namespace Prometeo.Planner.Console
         private void RenderMap()
         {
             BmpPlanner.Children.Clear();
+
+            if (RenderWeatherConditions)
+                BmpPlanner.Children.Add(new MapTileLayer()
+                {
+                    TileSource = new WMSTileSource(),
+                    Opacity = 0.8
+                });
+
             MapLayer labelLayer = new MapLayer();
 
             int totalFireCount = 0;
@@ -196,14 +283,14 @@ namespace Prometeo.Planner.Console
             foreach (var flight in Flights)
                 totalFireCount += RenderMap(flight.MapModel, labelLayer, "Potential fire", (ControlTemplate)Application.Current.Resources["FirePushPinTemplate"]);
 
-            // Plot red flags alerts
-            foreach (var redflag in RedFlagsNotifications)
-                RenderMap(redflag.MapModel, labelLayer, "Red flag warning", null);
+            if (RenderRedFlagAlerts)
+                foreach (var redflag in RedFlagsNotifications)
+                    RenderMap(redflag.MapModel, labelLayer, "Red flag warning", null);
 
             if (totalFireCount > 0)
             {
                 var centerPoint = Flights.Where((f) => f.FireDetected).First().MapModel.Marks.First();
-                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), MAP_ZOOM_LEVEL_AREA);
+                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), Math.Max(MAP_ZOOM_LEVEL_AREA, BmpPlanner.ZoomLevel));
 
                 FireAlert = Visibility.Visible;
                 AreaIsGood = Visibility.Collapsed;
@@ -212,14 +299,21 @@ namespace Prometeo.Planner.Console
             }
             else if (Flights.Any())
             {
+                var centerPoint = Flights.First().MapModel.Polygons.First().CenterPosition();
+                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), Math.Max(MAP_ZOOM_LEVEL_AREA, BmpPlanner.ZoomLevel));
+
                 AreaIsGood = Visibility.Visible;
                 FireAlert = Visibility.Collapsed;
                 NotifyPropertyChanged("AreaIsGood");
                 NotifyPropertyChanged("FireAlert");
             }
+            else if (AreasOfInterest.Any())
+            {
+                var centerPoint = AreasOfInterest.First().MapModel.Polygons.First().CenterPosition();
+                BmpPlanner.SetView(new Location(centerPoint.Latitude, centerPoint.Longitude), Math.Max(MAP_ZOOM_LEVEL_AREA, BmpPlanner.ZoomLevel));
+            }
 
             BmpPlanner.Children.Add(labelLayer);
-
         }
 
         private int RenderMap(MapModel mapModel, MapLayer labelLayer, string pinToolTipText, ControlTemplate pushpinTemplate)
@@ -278,7 +372,7 @@ namespace Prometeo.Planner.Console
 
         private void CmdEndPolygonDrawing_Execute(object obj)
         {
-            if (_draftMapModel.IsCurrentlyDrawing)
+            if (_draftMapModel != null && _draftMapModel.IsCurrentlyDrawing)
             {
                 var pol = _draftMapModel.FinishCurrentPolygon();
 
@@ -289,15 +383,20 @@ namespace Prometeo.Planner.Console
                 NotifyPropertyChanged("DrawingRequested");
                 NotifyPropertyChanged("DrawingHelpVisible");
 
+                var areaInAcres = pol.CoveredArea();
+
                 AreasOfInterest.Add(new AreaOfInterest()
                 {
                     AnalizedArea = 0,
-                    Area = pol.CoveredArea(),
-                    RequiredFlightTime = 0,
-                    RequiredImages = 0,
+                    Area = areaInAcres,
+                    RequiredFlightTime = Math.Round(areaInAcres * 1.0425 / 6, 2),
+                    RequiredImages = (int) Math.Ceiling(areaInAcres * 37 / 6),
                     MapModel = _draftMapModel
                 });
                 NotifyPropertyChanged("AreasOfInterest");
+
+                AddToMyAreasVisibility = Visibility.Visible;
+                NotifyPropertyChanged("AddToMyAreasVisibility");
 
                 _draftMapModel = null;
 
@@ -305,16 +404,25 @@ namespace Prometeo.Planner.Console
             }
         }
 
-        private void BmpPlanner_MouseDown(object sender, MouseButtonEventArgs e)
+        private void BmpPlanner_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!_draftMapModel.IsCurrentlyDrawing)
+            if (_draftMapModel == null)
             {
-                _draftMapModel.StartNewPolygon();
-                BmpPlanner.MouseMove += BmpPlanner_MouseMove;
+                // If null, something is wrong
+                BmpPlanner.MouseDown -= BmpPlanner_MouseDown;
+                BmpPlanner.MouseMove -= BmpPlanner_MouseMove;
             }
+            else
+            {
+                if (!_draftMapModel.IsCurrentlyDrawing)
+                {
+                    _draftMapModel.StartNewPolygon();
+                    BmpPlanner.MouseMove += BmpPlanner_MouseMove;
+                }
 
-            _draftMapModel.AddPointToPolygon(e.GetPosition(BmpPlanner));
-            RenderMap();
+                _draftMapModel.AddPointToPolygon(e.GetPosition(BmpPlanner));
+                RenderMap();
+            }
         }
 
         private void BmpPlanner_MouseMove(object sender, MouseEventArgs e)

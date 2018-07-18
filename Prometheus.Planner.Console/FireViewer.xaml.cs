@@ -28,6 +28,7 @@ namespace Prometeo.Planner.Console
     /// </summary>
     public partial class FireViewer : RibbonWindow, INotifyPropertyChanged
     {
+        public ApplicationCommand CmdClose { get; set; }
         public ApplicationCommand CmdNotifyFire { get; set; }
         public ApplicationCommand CmdSafeFire { get; set; }
         public ApplicationCommand CmdNotAFire { get; set; }
@@ -39,6 +40,7 @@ namespace Prometeo.Planner.Console
         public int ImageHPadding { get; private set; }
         public int TotalHeight { get => ImageHeight + ImageVPadding; }
         public int TotalWidth { get => ImageWidth + ImageHPadding; }
+        public double OverallConfidence { get; set; }
         public bool ShowTags { get => _showTags; set { _showTags = value; NotifyPropertyChanged("ShowTags"); renderBoxes(ImageResults, true); } }
         bool _showTags;
 
@@ -54,8 +56,10 @@ namespace Prometeo.Planner.Console
             CmdNotifyFire = new ApplicationCommand(CmdNotifyFire_Execute);
             CmdSafeFire = new ApplicationCommand(CmdSafeFire_Execute);
             CmdNotAFire = new ApplicationCommand(CmdNotAFire_Execute);
+            CmdClose = new ApplicationCommand((Action)delegate () { Close(); });
 
             DataContext = this;
+            OverallConfidence = results.scores.Max();
             ImagePath = imagePath;
             ImageResults = results;
             _longitude = longitude;

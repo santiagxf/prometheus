@@ -19,7 +19,7 @@ namespace Prometeo.Planner.Console.Map
         Microsoft.Maps.MapControl.WPF.Map _map;
         public Collection<MapPolygon> Polygons { get; set; }
         public GeoCoordinateCollection Marks { get; set; }
-        public SolidColorBrush Shading { get; set; }
+        public Brush Shading { get; set; }
         public SolidColorBrush Stroke { get; set; }
         public int StrokeThickness { get; set; }
 

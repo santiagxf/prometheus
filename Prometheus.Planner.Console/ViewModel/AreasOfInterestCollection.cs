@@ -11,11 +11,14 @@ namespace Prometeo.Planner.Console.ViewModel
 {
     public class AreasOfInterestCollection : ObservableCollection<AreaOfInterest>
     {
-        public void AddToAnalizedArea(double value)
+        public void AddToAnalizedArea(Flight flight)
         {
             var areaUnfilled = Items.Where((a) => a.AnalizedAreaPercentage < 1).FirstOrDefault();
             if (areaUnfilled != null)
-                areaUnfilled.AnalizedArea += value;
+            {
+                areaUnfilled.Flights.Add(flight);
+                areaUnfilled.AnalizedArea += flight.CoveredArea;
+            }
         }
 
         internal void NotifyAllPropertyChanged(string v)

@@ -64,7 +64,7 @@ namespace Prometeo.Planner.Console
 
             if (!gpsDataNotFound)
             {
-                wdw.LblTitle.Content = "Look for a location to zoom in";
+                wdw.LblTitle.Content = "Look for a location to zoom in".ToUpper();
                 wdw.LblText.Content = "Type the name of a city or state";
             }
 

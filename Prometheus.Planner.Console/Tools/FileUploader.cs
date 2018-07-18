@@ -44,13 +44,20 @@ namespace Prometeo.Planner.Console.Tools
             // request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes("username" + ":" + "password")));
 
             // Send the form data to the request.
-            using (Stream requestStream = request.GetRequestStream())
+            try
             {
-                requestStream.Write(formData, 0, formData.Length);
-                requestStream.Close();
-            }
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(formData, 0, formData.Length);
+                    requestStream.Close();
+                }
 
-            return request.GetResponse() as HttpWebResponse;
+                return request.GetResponse() as HttpWebResponse;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private static byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)

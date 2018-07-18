@@ -7,91 +7,225 @@
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:BingMaps="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+        xmlns:Map="clr-namespace:Prometeo.Planner.Console.Map"
         mc:Ignorable="d" WindowState="Maximized"
+        x:Name="UcMainControl"
+        Style="{StaticResource DarkWindow}"
+        WindowStyle="SingleBorderWindow"
         Title="Prometheus: The AI fire detector drone" d:DesignHeight="900" Width="800">
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CmdEndPolygonDrawing }" />
     </Window.InputBindings>
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        
-        <Fluent:Ribbon x:Name="rbMainUI" VerticalAlignment="Top" DockPanel.Dock="Top">
-            <Fluent:Ribbon.Menu>
-                <Fluent:Backstage Header="Prometheus" Width="85">
-                    <Fluent:BackstageTabControl>
-                        <Fluent:BackstageTabItem Header="About Prometheus ">
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" TextBlock.FontSize="14">
-                                <Image Source="Img/prometheus-red.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10, 0, 0" Height="100" />
-                                <Label Style="{StaticResource BlueH1}" Margin="34,10,0,0" Content="About the project"/>
-                                <TextBlock Foreground="Black" Margin="40, 10, 40, 0" TextWrapping="Wrap"><Run Text="An early fire detection AI technology using drones. Named after Prometheus, the Greek Titan, who defies the gods by stealing fire and giving it to humanity, an act that enabled progress and civilization. We are itching to do the same" /></TextBlock>
-                                <TextBlock Foreground="Black" Margin="40, 10, 40, 0" TextWrapping="Wrap"><Run Text="We combine surveillance drones and concepts of machine learning to detect wildfires while they are still in their early stages. The concept is to leverage the vast amounts of wildfire images and videos available on the internet to train a deep learning neural network to detect the presence of a fire, however small it may be. The drone would then fly over parks and forests collecting the images and an algorithm  will determine the confidence level at which it believes a region is about to develop a fire." /></TextBlock>
-
-                                <Label Style="{StaticResource BlueH1}" Margin="34,30,0,0" Content="Prometheus is possible thank to"/>
-
-                                <Label Style="{StaticResource BlueH1}" Margin="34,30,0,0" Content="Technologies we use"/>
-                                
-                            </StackPanel>
-                        </Fluent:BackstageTabItem>
-                        <Fluent:Button Header="Close" Command="{Binding CmdClose}" />
-                    </Fluent:BackstageTabControl>
-                </Fluent:Backstage>
-            </Fluent:Ribbon.Menu>
-            <Fluent:RibbonTabItem Header="Flight and analyze" IsSelected="True" >
-                <Fluent:RibbonGroupBox Header="Map">
-                    <Fluent:Button Header="Search and pan" Size="Large" Command="{Binding CmdMoveMap}" LargeIcon="/Prometheus.Planner.Console;component/Img/Look.png" />
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Design">
-                    <Fluent:ToggleButton Header="Specify area of interest" Size="Large" Command="{Binding CmdStartPolygon}" LargeIcon="/Prometheus.Planner.Console;component/Img/Draw.png" IsChecked="{Binding DrawingRequested }" />
-                    <Fluent:Button Header="Clean map" Command="{Binding CmdCleanMap}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Clean.png" />
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Fire detection">
-                    <Fluent:Button Header="Analyze new flight" Size="Large" Command="{Binding CmdAnalizeNow}" LargeIcon="/Prometheus.Planner.Console;component/Img\Run.png" />
-                    <Fluent:RibbonGroupBox Height="75" />
-                    <Fluent:Button Header="Save results" IsEnabled="False" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img/Save.png" />
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Alerts and settings">
-                    <Fluent:Button Header="My group" Size="Large" Command="{Binding CmdAlertGroups}" LargeIcon="/Prometheus.Planner.Console;component/Img\Group.png" />
-                    <Fluent:Button Header="Settings" Size="Large" Command="{Binding CmdConfig}" LargeIcon="/Prometheus.Planner.Console;component/Img\Configure.png" />
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
-        </Fluent:Ribbon>
         <StackPanel DockPanel.Dock="Top">
             <StackPanel.InputBindings>
                 <MouseBinding MouseAction="LeftClick" Command="{Binding CmdNotificationOpened}" />
             </StackPanel.InputBindings>
-            <Border Visibility="{Binding DrawingHelpVisible}" Background="{StaticResource AccentBlue}" BorderBrush="{StaticResource BlueTheme}" BorderThickness="1" Padding="10,2">
+            <Border>
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Click all the points that contain the area under review: "/><Run Text="When you are finished, press escape." /></TextBlock>
-                </Grid>
-            </Border>
-            <Border Visibility="{Binding AreaIsGood}" Background="#FF95D889" BorderBrush="#FF549D47" BorderThickness="1" Padding="10,2">
-                <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="We are all good: "/><Run Text="The analized area seems to be safe. Check the map to see the area covered in the flight." /></TextBlock>
-                </Grid>
-            </Border>
-            <Border Visibility="{Binding FireAlert }" Background="IndianRed" BorderBrush="DarkRed" BorderThickness="1" Padding="10,2">
-                <Grid>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Light" Padding="5"><Run FontFamily="Segoe UI" FontWeight="Bold" Text="Fire under development: "/><Run Text="Map moved to the affected area" /></TextBlock>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Visibility="{Binding FireAlert }" Grid.ColumnSpan="4" Background="DarkRed" Cursor="Hand">
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource DarkDeamonText}" Content="FIRE UNDER DEVELOPMENT: ZOOMING TO THE AFFECTED AREA"/>
+                    </Border>
+                    <Border Grid.ColumnSpan="4" Visibility="{Binding AreaIsGood}">
+                        <Label VerticalAlignment="Center" Style="{StaticResource BlueDeamonText}" HorizontalAlignment="Center" Content="WE ARE ALL GOOD: CHECK THE MAP TO SEE THE COVERED AREA" />
+                    </Border>
+                    <Border Grid.ColumnSpan="4" Visibility="{Binding DrawingHelpVisible}" HorizontalAlignment="Center" >
+                        <Label VerticalAlignment="Center" Style="{StaticResource DarkDeamonText}" Content="CLIC ON THE MAP TO START DRAWING. THEN PRESS ESCAPE" />
+                    </Border>
+
+                    <Image Source="Img/Toolbar/team.png" Height="28" Width="28" VerticalAlignment="Center" />
+                    <Label Grid.Column="1" Content="PROMETHEUS" Style="{StaticResource DarkDeamonText}" VerticalAlignment="Center" />
+
+                    <Button Style="{StaticResource DarkButtonSmall}" Height="25" Width="25" Content="X" Grid.Column="3" />
                 </Grid>
             </Border>
         </StackPanel>
         <StackPanel Name="SpnMain" Background="WhiteSmoke" DockPanel.Dock="Top" Orientation="Horizontal">
-            <StackPanel Width="{Binding ElementName=SpnMain, Path=ActualWidth}">
+            <StackPanel Margin="0" Panel.ZIndex="100" Width="260">
+                <Border BorderThickness="0,6, 0, 1" Padding="4" Margin="14,14,14,0" Background="{StaticResource DarkDeamon}" BorderBrush="Gray">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="55" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="MAP OPTIONS" Style="{StaticResource BlueDeamonText}" Grid.ColumnSpan="2" Grid.Row="0"/>
+                        <ToggleButton IsChecked="{Binding RenderWeatherConditions }" Margin="0,5" Grid.Column="0" Grid.Row="1" Style="{StaticResource SwitchTypeToggleButton}" />
+                        <TextBlock Margin="0,5" Style="{StaticResource BlueNotesText}" Grid.Row="1" Grid.Column="1"><Run Text="Sea-level pressure" /></TextBlock>
+                        <ToggleButton IsChecked="{Binding RenderRedFlagAlerts }" Margin="0,5" Grid.Column="0" Grid.Row="2" Style="{StaticResource SwitchTypeToggleButton}" />
+                        <TextBlock Margin="0,5" Style="{StaticResource BlueNotesText}" Grid.Row="2" Grid.Column="1"><Run Text="Red flag alerts" /></TextBlock>
+                    </Grid>
+                </Border>
+                <Border BorderThickness="0,6, 0, 1" Padding="4" Margin="14,14,14,0" Background="{StaticResource DarkDeamon}" BorderBrush="Gray">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="TOOLBOX" Style="{StaticResource BlueDeamonText}" Grid.ColumnSpan="2" Grid.Row="0"/>
+                        <Button Command="{Binding CmdMoveMap}" Grid.Column="0" Content="MOVE MAP" Grid.Row="1" Style="{StaticResource DarkButton}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/search.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                        <Button Command="{Binding CmdStartPolygon}" Grid.Column="1" Content="DESIGN AREA" Grid.Row="1" Style="{StaticResource DarkButton}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/draw.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                        <Button Command="{Binding CmdCleanMap}" Grid.Column="0" Content="CLEAR MAP" Grid.Row="2" Style="{StaticResource DarkButton}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/clear.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                        <Button Command="{Binding CmdAnalizeNow}" Grid.Column="1" Content="ANALYZE" Grid.Row="2" Style="{StaticResource DarkButton}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/findfire.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                        <Button Command="{Binding CmdConfig}" Grid.Column="0" Content="SETTINGS" Grid.Row="3" Style="{StaticResource DarkButton}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/SETTINGS.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                        <Button Command="{Binding CmdSave}" Grid.Column="1" Content="TO MY AREAS" Grid.Row="3" Style="{StaticResource DarkButton}" Visibility="{Binding AddToMyAreasVisibility}">
+                            <Button.ContentTemplate>
+                                <ItemContainerTemplate>
+                                    <StackPanel Margin="5">
+                                        <Image Source="Img/Toolbar/add.png" Height="60" Width="60" Margin="0,0,0,5" />
+                                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </ItemContainerTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                    </Grid>
+                </Border>
+                <Border BorderThickness="0,6, 0, 1" Padding="4" Margin="14,14,14,0" Background="{StaticResource DarkDeamon}" BorderBrush="Gray">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="55" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="SAVED PLACES" Style="{StaticResource BlueDeamonText}" Grid.ColumnSpan="2" Grid.Row="0"/>
+                        <TextBlock Style="{StaticResource BlueNotesText}" Grid.Row="1" Grid.ColumnSpan="2"><Run Text="Find and load saved places and settings in this panel." /></TextBlock>
+                        <ItemsControl Grid.ColumnSpan="2" Grid.Row="2" ItemsSource="{Binding SavedAreasOfInterest}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Style="{StaticResource BlueDeamonTextSmall}" Content="{Binding Name}" Cursor="Hand">
+                                        <Label.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.OpenSavedAOI, ElementName=UcMainControl}" CommandParameter="{Binding }" />
+                                        </Label.InputBindings>
+                                    </Label>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+            </StackPanel>
+            <StackPanel Margin="-260,0,0,0" Width="{Binding ElementName=SpnMain, Path=ActualWidth}">
                 <BingMaps:Map Name="BmpPlanner" Mode="AerialWithLabels" Height="{Binding ElementName=SpnMain, Path=ActualHeight}" Margin="0,0,0,0" CredentialsProvider="KPbtiXkBX8VRcWffNjT0 ~j9fmVQYKiGxco8E8u7d9Rw~AtCEMlc7ixbT5zT531wvU_znIXzBl7JKNjOh6D_Wdfdo8hcnDP3LAFAc_zMZBhRN" ZoomLevel="3" />
                 <Image Source="Img/prometheus.png" Margin="0,-160, 0, 0" Height="60" HorizontalAlignment="Right" />
             </StackPanel>
-            <StackPanel Width="260" Margin="-260,0,0,0">
+            <StackPanel Width="260" Margin="-260,14,0,0">
+                <ItemsControl ItemsSource="{Binding RedFlagsNotifications}" Visibility="{Binding AnyRedFlagsNotification }">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0,6, 0, 1" Padding="4" Margin="14,0,14,14" Background="{StaticResource BlueDeamon}" BorderBrush="LightGray">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="30" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Height="28" Width="28" Source="Img/Toolbar/alert.png" Grid.Column="0" Grid.Row="0"/>
+                                    <Label Content="RED FLAG ALERTS" Style="{StaticResource DarkDeamonText}" Grid.Column="1" Grid.Row="0"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Row="1" Grid.ColumnSpan="2"><Run Text="Critical fire weather conditions are either occurring now, or will shortly. A combination of strong winds, low relative humidity, and warm temperatures can contribute to extreme fire behavior." /></TextBlock>
+                                    <Button Content="DISMISS NOTIFICATION" Style="{StaticResource BlueButton}" Height="23" Grid.Row="3" Grid.ColumnSpan="2" Command="{Binding Path=DataContext.CmdDismissRedFlagNotifications, ElementName=UcMainControl }" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <ItemsControl ItemsSource="{Binding AreasOfInterest}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="0,6, 0, 1" Margin="14" Background="{StaticResource AccentBlue}" BorderBrush="LightGray" Padding="4">
-                                <StackPanel>
-                                    <Label Content="Area of interest" Style="{StaticResource BlueH1}" Foreground="White"/>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Covered area:&#160;</Run><Run Text="{Binding Area, StringFormat=##0.00}" /><Run>&#160;mts2</Run></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Analized area:&#160;</Run><Run Text="{Binding AnalizedAreaPercentage, StringFormat=p, Mode=OneWay}" /></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Flight time:&#160;</Run><Run Text="{Binding RequiredFlightTime }" /></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Images required:&#160;</Run><Run Text="{Binding RequiredImages}" /></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}">Estimation in the requirement to flight the are will vary depending on the drone.</TextBlock>
-                                </StackPanel>
+                            <Border BorderThickness="0,6,0,1" Margin="14, 0, 14, 14" Background="{StaticResource BlueDeamon}" BorderBrush="LightGray" Padding="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="46" />
+                                    </Grid.RowDefinitions>
+                                    <Label Content="AREA OF INTEREST" Style="{StaticResource DarkDeamonText}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
+                                    <Image Height="28" Width="28" Source="Img/Toolbar/area.png" Grid.Column="0" Grid.Row="1"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="1"><Run FontWeight="Bold"> Covered area:</Run><LineBreak/><Run Text="{Binding Area, StringFormat=##0}" /><Run>&#160;acres</Run></TextBlock>
+                                    <Image Height="28" Width="28" Source="Img/Toolbar/progress.png" Grid.Column="0" Grid.Row="2"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="2"><Run FontWeight="Bold"> Progress:</Run><LineBreak/><Run Text="{Binding AnalizedAreaPercentage, StringFormat=p, Mode=OneWay}" /></TextBlock>
+                                    <Image Height="32" Width="32" Source="Img/Toolbar/time.png" Grid.Column="0" Grid.Row="3"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="3"><Run FontWeight="Bold"> Flight time*:</Run><LineBreak/><Run Text="{Binding RequiredFlightTime, StringFormat=##0}" /><Run Text=" min" /></TextBlock>
+                                    <Image Height="32" Width="32" Source="Img/Toolbar/images.png" Grid.Column="0" Grid.Row="4"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="4"><Run FontWeight="Bold"> Images required*:</Run><LineBreak/><Run Text="{Binding RequiredImages, StringFormat=##0}" /></TextBlock>
+                                    <Image Height="32" Width="32" Source="Img/Toolbar/altitude.png" Grid.Column="0" Grid.Row="5"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="5"><Run FontWeight="Bold"> Suggested altitude:</Run><LineBreak/><Run Text="400 ft." /></TextBlock>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -99,13 +233,24 @@
                 <ItemsControl ItemsSource="{Binding Flights}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="0,6,0,1" Margin="14,8,14,8" Background="{Binding AreaColor}" BorderBrush="LightGray" Padding="4">
-                                <StackPanel>
-                                    <Label Content="Flight" Style="{StaticResource BlueH1}" Foreground="White"/>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Covered area:&#160;</Run><Run Text="{Binding CoveredArea, StringFormat=##0.00}" /><Run>&#160;mts2</Run></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Images analyzed:&#160;</Run><Run Text="{Binding Images}" /></TextBlock>
-                                    <TextBlock Style="{StaticResource BlueNotesText}"><Run FontWeight="Bold"> Results:&#160;</Run><Run Text="{Binding ResultAsString, Mode=OneWay }" /></TextBlock>
-                                </StackPanel>
+                            <Border BorderThickness="0,6,0,1" Margin="14,0,14,14" Background="{StaticResource BlueDeamon}" BorderBrush="LightGray" Padding="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="46" />
+                                    </Grid.RowDefinitions>
+                                    <Label Content="YOUR FLIGHT: " Grid.ColumnSpan="2" Style="{StaticResource DarkDeamonText}" />
+                                    <Label Style="{StaticResource DarkDeamonText}" Margin="110,0,0,0" Foreground="DarkRed" Grid.ColumnSpan="2" Content="{Binding ResultAsString, Mode=OneWay }" Typography.Capitals="AllPetiteCaps" />
+                                    <Image Height="28" Width="28" Source="Img/Toolbar/area.png" Grid.Column="0" Grid.Row="1"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="1"><Run FontWeight="Bold"> Covered area:</Run><LineBreak /><Run Text="{Binding CoveredArea, StringFormat=##0}" /><Run>&#160;acres</Run></TextBlock>
+                                    <Image Height="32" Width="32" Source="Img/Toolbar/images.png" Grid.Column="0" Grid.Row="2"/>
+                                    <TextBlock Style="{StaticResource BlueNotesText}" Grid.Column="1" Grid.Row="2"><Run FontWeight="Bold"> Images analyzed:</Run><LineBreak /><Run Text="{Binding Images}" /></TextBlock>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

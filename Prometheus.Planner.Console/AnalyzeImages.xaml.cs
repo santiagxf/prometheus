@@ -38,6 +38,7 @@ namespace Prometeo.Planner.Console
         public string CurrentStatus { get; set; }
         public int CurrentProgress { get; set; }
         public bool ServiceRunning { get; set; }
+        public bool IsWarmingUp { get; set; }
         public string FilePath { get; set; }
         BackgroundWorker _worker;
         string _serviceUrl;
@@ -50,6 +51,7 @@ namespace Prometeo.Planner.Console
         {
             InitializeComponent();
 
+            IsWarmingUp = true;
             ServiceRunning = true;
             DetectedFires = new Collection<LocationMark>();
             CoveredArea = new GeoCoordinateCollection();
@@ -69,10 +71,12 @@ namespace Prometeo.Planner.Console
 
         private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            IsWarmingUp = false;
             CurrentStatus = (string) e.UserState;
             CurrentProgress = e.ProgressPercentage;
             NotifyPropertyChanged("CurrentProgress");
             NotifyPropertyChanged("CurrentStatus");
+            NotifyPropertyChanged("IsWarmingUp");
         }
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -190,12 +194,18 @@ namespace Prometeo.Planner.Console
             {
                 HttpWebResponse webResponse = FileUploader.MultipartFormDataPost(_serviceUrl, "Prometheus", postParameters);
 
-                // Process response
-                StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
-                string fullResponse = responseReader.ReadToEnd();
-                webResponse.Close();
+                if (webResponse != null)
+                {
+                    // Process response
+                    StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
+                    string fullResponse = responseReader.ReadToEnd();
+                    webResponse.Close();
 
-                return JsonConvert.DeserializeObject<ImageDetectionResult>(fullResponse);
+                    return JsonConvert.DeserializeObject<ImageDetectionResult>(fullResponse);
+                }
+
+                ServiceRunning = false;
+                return null;
             }
             catch (SocketException ex)
             {
@@ -223,12 +233,17 @@ namespace Prometeo.Planner.Console
             {
                 HttpWebResponse webResponse = FileUploader.MultipartFormDataPost(_serviceUrl, "Prometheus", postParameters);
 
-                // Process response
-                StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
-                string fullResponse = responseReader.ReadToEnd();
-                webResponse.Close();
+                if (webResponse != null)
+                {
+                    // Process response
+                    StreamReader responseReader = new StreamReader(webResponse.GetResponseStream());
+                    string fullResponse = responseReader.ReadToEnd();
+                    webResponse.Close();
 
-                return JsonConvert.DeserializeObject<IEnumerable<ImageDetectionResult>>(fullResponse);
+                    return JsonConvert.DeserializeObject<IEnumerable<ImageDetectionResult>>(fullResponse);
+                }
+                ServiceRunning = false;
+                return null;
             }
             catch (SocketException ex)
             {

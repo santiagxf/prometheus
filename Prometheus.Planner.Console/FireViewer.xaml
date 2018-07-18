@@ -6,22 +6,59 @@
         xmlns:local="clr-namespace:Prometeo.Planner.Console"
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         mc:Ignorable="d"
-        Title="Viewer" WindowStartupLocation="CenterScreen" Width="800">
-    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Fluent:Ribbon x:Name="rbMainUI" VerticalAlignment="Top" DockPanel.Dock="Top">
-            <Fluent:RibbonTabItem Header="Flight image tools" IsSelected="True" >
-                <Fluent:RibbonGroupBox Header="Act on">
-                    <Fluent:Button Header="Notify fire now" Size="Large" Command="{Binding CmdNotifyFire}" LargeIcon="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
-                    <Fluent:ToggleButton Header="View tags" Size="Large" IsChecked="{Binding ShowTags}" LargeIcon="/Prometheus.Planner.Console;component/Img\Tags.png" />
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Feedback">
-                    <Fluent:Button Header="It is a safe fire" Command="{Binding CmdSafeFire}" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\SafeFire.png" />
-                    <Fluent:Button Header="It is not a fire" Size="Large" LargeIcon="/Prometheus.Planner.Console;component/Img\NotFire.png" Command="{Binding CmdNotAFire}" />
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
-        </Fluent:Ribbon>
+        x:Name="UcMainControl"
+        Title="Viewer" WindowStartupLocation="CenterScreen" Width="800" Style="{StaticResource DarkWindow}">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.InputBindings>
+            <KeyBinding Key="Esc" Command="{Binding DataContext.CmdClose, ElementName=UcMainControl }" />
+        </Grid.InputBindings>
         <Canvas x:Name="MainCanvas" Margin="{Binding CanvasMargin}">
             <Image x:Name="ImageCtrl" Canvas.Left="{Binding ImageHPadding}" Canvas.Top="{Binding ImageVPadding}" Source="{Binding ImagePath}" Height="{Binding ImageHeight}" Width="{Binding ImageWidth}" Stretch="UniformToFill" />
         </Canvas>
-    </DockPanel>
+        <StackPanel Orientation="Horizontal" Margin="14,0,0,74.857" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Button Command="{Binding CmdNotifyFire}" Grid.Column="0" Content="NOTIFY" Grid.Row="1" Style="{StaticResource DarkButtonSmall}">
+                <Button.ContentTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Margin="2">
+                            <Image Source="Img/Toolbar/notify.png" Height="42" Width="42" />
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <ToggleButton Grid.Column="1" Content="VIEW TAGS" Grid.Row="1" IsChecked="{Binding ShowTags}" Style="{StaticResource DarkToggleButtonSmall}">
+                <ToggleButton.ContentTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Margin="2">
+                            <Image Source="Img/Toolbar/tags.png" Height="42" Width="42" />
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </ToggleButton.ContentTemplate>
+            </ToggleButton>
+            <Button Command="{Binding CmdSafeFire}" Grid.Column="0" Content="SAFE FIRE" Grid.Row="2" Style="{StaticResource DarkButtonSmall}">
+                <Button.ContentTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Margin="2">
+                            <Image Source="Img/Toolbar/save.png" Height="42" Width="42" />
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button Command="{Binding CmdNotAFire}" Grid.Column="1" Content="NOT FIRE" Grid.Row="2" Style="{StaticResource DarkButtonSmall}">
+                <Button.ContentTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Margin="2">
+                            <Image Source="Img/Toolbar/close.png" Height="42" Width="42" />
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </StackPanel>
+        <Label Content="OVERALL CONFIDENCE" Style="{StaticResource BlueDeamonTextSmall}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,40.857" />
+        <Label Content="{Binding OverallConfidence }" ContentStringFormat="p" Style="{StaticResource BlueDeamonText}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,9.857" />
+        <Label Content="FLIGHT TOOLKIT" Style="{StaticResource BlueDeamonTextSmall}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,164.857" />
+    </Grid>
 </Fluent:RibbonWindow>
