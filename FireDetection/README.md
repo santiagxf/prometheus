@@ -17,7 +17,7 @@
             <ul>
                 <li>We use transfer learning with a pretrained image classification models to extract visual features, as these tend to generalize fairly well.</li>
                 <li>The representations learned for task A (typically a high-level task) are applied to task B (typically a lower-level task). The degree of success at task B indicates how much the task A model has learned about task B.</li>
-                <li>In the processes we take a pre-trained model and “fine-tuning” the model with your our own dataset. The idea is that this pre-trained model will act as a feature extractor. You will remove the last layer of the network and replace it with your own classifier. You then freeze the weights of all the other layers and train the network normally.</li>
+                <li>In the processes we take a pre-trained model (AlexNet) and “fine-tuning” the model with our own dataset. The idea is that this pre-trained model will act as a feature extractor. By removing the last layer of the network and replacing it with our own classifier we achieve better performance with less data. Then we freeze the weights of all the other layers and train the network normally.</li>
             </ul>
         </li>
         <li>Non-maximum suppression: Overlapping boxes are combined into a single bounding box. We used Intel Math Library for Python in a C implementation as computing efficiency is critical for speed.</li>
