@@ -26,6 +26,6 @@
 
 <h3>Representations</h3>
 <p>
-using TensorBoard we can see the representations learnt by the model. In the following picture it can be seen how the network is able to segregate the fire from the smoke as it goes deeper in the network.
-<img src="../doc/representations.png" alt="Representations learnt">
-</p>
+Using TensorBoard we can see the representations learnt by the model. In the following picture it can be seen how the network is able to segregate the fire from the smoke as it goes deeper in the network.</p>
+
+<img src="../doc/Representations.png" alt="Representations learnt">

@@ -116,6 +116,7 @@ FireDetection/DataSets/Fire/positive
 FireDetection/DataSets/Fire/testImages
 Prometheus.api/service/obj/*
 .vscode/
+.vs/
 Prometheus.api/service/env-*
 Prometheus.api/service/bin/*
 Prometheus.api/imagepool/*
