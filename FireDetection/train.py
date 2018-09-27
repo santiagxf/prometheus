@@ -1,9 +1,3 @@
-# Copyright (c) Microsoft. All rights reserved.
-
-# Licensed under the MIT license. See LICENSE.md file in the project root
-# for full license information.
-# ==============================================================================
-
 import os, sys
 import numpy as np
 import utils.od_utils as od
