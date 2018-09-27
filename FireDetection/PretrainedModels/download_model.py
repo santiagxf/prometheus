@@ -1,9 +1,3 @@
-# Copyright (c) Microsoft. All rights reserved.
-
-# Licensed under the MIT license. See LICENSE.md file in the project root
-# for full license information.
-# ==============================================================================
-
 from __future__ import print_function
 import os
 import sys
@@ -12,8 +6,8 @@ try:
 except ImportError: 
     from urllib import urlretrieve
 
-# Add models here like this: (category, model_name, model_url)
-models = (('Image Classification', 'AlexNet_ImageNet_Caffe', 'https://www.cntk.ai/Models/Caffe_Converted/AlexNet_ImageNet_Caffe.model'),
+models = (('Image Classification', 'AlexNet_ImageNet_Caffe.model', 'https://www.cntk.ai/Models/Caffe_Converted/AlexNet_ImageNet_Caffe.model'),
+          ('Fire Detection', 'prometheus.dnn', ''),
          )
 
 def download_model(model_file_name, model_url):
@@ -27,15 +21,12 @@ def download_model(model_file_name, model_url):
         print('CNTK model already available at ' + filename)
     
 def download_model_by_name(model_name):
-    if model_name.endswith('.model'):
-        model_name = model_name[:-6]
-
     model = next((x for x in models if x[1]==model_name), None)
     if model is None:
         print("ERROR: Unknown model name '%s'." % model_name)
         list_available_models()
     else:
-        download_model(model_name + '.model', model[2])
+        download_model(model_name, model[2])
 
 def list_available_models():
     print("\nAvailable models (for more information see Readme.md):")
