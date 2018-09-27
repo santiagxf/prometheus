@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # C extensions
-*.so
+#*.so PROMETHEUS: Adding compiled versions of the modules
 
 # Distribution / packaging
 .Python
@@ -98,11 +98,13 @@ ENV/
 /site
 
 # mypy
+*.tar
 .mypy_cache/
 /FireDetection/DataSets/Fire
 /FireDetection/FasterRCNN/Output
-/FireDetection/PretrainedModels/AlexNet_ImageNet_Caffe.model
-/FireDetection/PretrainedModels/prometheus.dnn
+/FireDetection/PretrainedModels/*.model
+/FireDetection/PretrainedModels/*.dnn
+/FireDetection/FasterRCNN/Tensorboard/*
 /Tools/VOTT-win32-x64
 PrometheusExp/
 Prometheus.api/service/PretrainedModels/prometheus.dnn

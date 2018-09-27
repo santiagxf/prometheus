@@ -121,11 +121,13 @@
       <DependentUpon>FireViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Geo\BingMapsRestServices.cs" />
-    <Compile Include="Geo\GeoCoordinate.cs" />
-    <Compile Include="Geo\GeoCoordinateCollection.cs" />
-    <Compile Include="Geo\GeoTagImage.cs" />
+    <Compile Include="Map\GeoCoordinate.cs" />
+    <Compile Include="Map\GeoCoordinateCollection.cs" />
+    <Compile Include="Map\GeoTagImage.cs" />
     <Compile Include="Geo\NationalWeatherService.cs" />
-    <Compile Include="Map\WMSTileSource.cs" />
+    <Compile Include="Geo\OpenWeatherService.cs" />
+    <Compile Include="Map\WMS\FIRMSTileSource.cs" />
+    <Compile Include="Map\WMS\MSLPTileSource.cs" />
     <Compile Include="Subscribe.xaml.cs">
       <DependentUpon>Subscribe.xaml</DependentUpon>
     </Compile>

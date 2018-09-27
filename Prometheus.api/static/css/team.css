@@ -1,0 +1,127 @@
+body a {
+	transition: 0.5s all;
+	-webkit-transition: 0.5s all;
+	-o-transition: 0.5s all;
+	-moz-transition: 0.5s all;
+	-ms-transition: 0.5s all;
+}
+
+/*-- team --*/
+
+.team_grid_info h3 {
+	font-size: 1.2em;
+	color: #222;
+	margin: 1em 0 0.5em 0;
+	font-weight: 600;
+}
+
+.team_grid_info:nth-child(1),
+.team_grid_info:nth-child(3) {
+	margin-top: 5em;
+}
+
+.team_grid_info p {
+	color: #acadaf;
+	font-size: 0.85em;
+}
+
+ul.team_icons li {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.team_grid ul li:last-child {
+	margin: 0;
+}
+
+.team_grid_info {
+	text-align: center;
+	padding: 0;
+	-webkit-transition: 0.5s ease-in;
+	-moz-transition: 0.5s ease-in;
+	-ms-transition: 0.5s ease-in;
+	-o-transition: 0.5s ease-in;
+	transition: 0.5s ease-in;
+	border: 1px solid #ddd;
+	padding: 3em 2em;
+	background: #ffffff;
+}
+
+.team_icons ul li {
+	list-style: none;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.team_icons ul li a i.fa {
+	height: 32px;
+	width: 32px;
+	background: none;
+	line-height: 31px;
+	color: #222;
+	transition: 0.5s all;
+	-webkit-transition: 0.5s all;
+	-moz-transition: 0.5s all;
+	-o-transition: 0.5s all;
+	-ms-transition: 0.5s all;
+	border: 1px solid #24262d;
+}
+
+.team_icons ul li a i.fa:hover {
+	color: #76daff;
+	border: 1px solid #76daff;
+}
+
+.team_grid_info img {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.team_icons ul {
+	margin-top: 1em;
+}
+
+/*-- //team --*/
+
+/*--responsive--*/
+
+@media (max-width:991px) {
+	.team_grid_info:nth-child(1),
+	.team_grid_info:nth-child(3),
+	.team_grid_info:nth-child(4),
+	.team_grid_info:nth-child(2) {
+		margin-top: 0em;
+	}
+	.team_grid_info {
+		width: 47%;
+		float: left;
+		margin: 3% 1%;
+	}
+}
+
+@media (max-width: 640px) {}
+
+@media (max-width:568px) {
+	.team_grid_info p {
+		font-size: 0.9em;
+	}
+}
+
+@media (max-width:480px) {
+	.team_grid_info {
+		padding: 2em 1em;
+	}
+	.team_icons ul li {
+		margin-right: 1px;
+	}
+}
+
+@media (max-width: 384px) {}
+
+@media (max-width: 375px) {}
+
+@media(max-width:375px) {}
+
+@media(max-width:320px) {}
+
+/*--//responsive--*/

@@ -63,17 +63,22 @@ namespace Prometeo.Planner.Console.Tools
                 var response = request.GetResponse();
                 using (var stream = response.GetResponseStream())
                 {
-                    Byte[] buffer = new Byte[response.ContentLength];
-                    int offset = 0, actuallyRead = 0;
-                    do
+                    if (response.ContentLength > 0)
                     {
-                        actuallyRead = stream.Read(buffer, offset, buffer.Length - offset);
-                        offset += actuallyRead;
+                        Byte[] buffer = new Byte[response.ContentLength];
+                        int offset = 0, actuallyRead = 0;
+                        do
+                        {
+                            actuallyRead = stream.Read(buffer, offset, buffer.Length - offset);
+                            offset += actuallyRead;
+                        }
+                        while (actuallyRead > 0);
+                        if (!string.IsNullOrEmpty(savePath))
+                            File.WriteAllBytes(savePath, buffer);
+                        return new MemoryStream(buffer);
                     }
-                    while (actuallyRead > 0);
-                    if (!string.IsNullOrEmpty(savePath))
-                        File.WriteAllBytes(savePath, buffer);
-                    return new MemoryStream(buffer);
+                    else
+                        return new MemoryStream();
                 }
             }
             catch (Exception ex)

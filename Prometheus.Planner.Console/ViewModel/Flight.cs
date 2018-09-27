@@ -72,7 +72,7 @@ namespace Prometeo.Planner.Console.ViewModel
         public double CoveredArea { get; set; }
         public bool FireDetected => MapModel.Marks.Count > 0;
         public string ResultAsString => FireDetected ? "At risk" : "Clean";
-        public SolidColorBrush AreaColor => FireDetected ? MapPolygonExtensions.RED_AREA_SHADING : MapPolygonExtensions.GREEN_AREA_SHADING;
+        public SolidColorBrush AreaColor => FireDetected ? new SolidColorBrush(Colors.DarkRed) : MapPolygonExtensions.BLUE_AREA_SHADING;
         public MapModel MapModel { get; set; }
     }
 }

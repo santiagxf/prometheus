@@ -4,12 +4,15 @@ Routes and views for the flask application.
 
 import json, os
 import service.scoring
-import service.gistools
 
 from app import app
 from datetime import datetime
 from flask import render_template
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
+
+@app.route('/static/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
 
 @app.route('/')
 @app.route('/help')
@@ -63,7 +66,3 @@ def supervise(supervisedLabel, scoringId):
         os.rename(unlabeledPath, labeledPath)
 
         return str(json.dumps(supervisedLabel))
-
-@app.route('/gis/<ugc>', methods=['GET'])
-def gisUgc(ugc):
-    return str(json.dumps(service.gistools.getShapeFromUGC(ugc)))

@@ -1,25 +1,14 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Newtonsoft.Json;
 using Prometeo.Planner.Console.Tools;
 using Prometeo.Planner.Console.ViewModel;
 using Prometeo.Planner.Console.ViewModel.Alerts;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Prometeo.Planner.Console
 {
@@ -60,16 +49,16 @@ namespace Prometeo.Planner.Console
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<AlertGroups> blogs = new List<AlertGroups>();
-
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["BlogConnectionString"]);
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable alertsTable = tableClient.GetTableReference("AlertGroups");
-
+            List<AlertGroups> members = new List<AlertGroups>();
             try
             {
-                var query = new TableQuery<AlertGroups>();
-                AllMembers = alertsTable.ExecuteQuery(query).ToList();
+                var partition = ConfigurationManager.AppSettings["subscribePartition"].ToString();
+                var currentMembers = RESTTools.Get(ConfigurationManager.AppSettings["subscribtionMembers"].ToString(), partition);
+
+                if (string.IsNullOrEmpty(currentMembers))
+                    members = JsonConvert.DeserializeObject<IEnumerable<AlertGroups>>(currentMembers)?.ToList();
+
+                AllMembers = members;
             }
             catch { }
         }

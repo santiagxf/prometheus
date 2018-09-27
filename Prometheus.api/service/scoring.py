@@ -46,7 +46,7 @@ class scorer:
         startTime = dt.datetime.now()
 
         if (scoringId == 0):
-            scoringId = scorer.generateScoringId()
+            scoringId = self.generateScoringId()
 
         #input
         imgPath = input_df

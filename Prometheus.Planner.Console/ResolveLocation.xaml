@@ -14,5 +14,7 @@
         <Button Content="Ok" Command="{Binding CmdAccept}" IsDefault="True" Style="{StaticResource DarkButton}" Margin="0,0,140.714,18.571" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Button Content="Cancel" Command="{Binding CmdCancel}" IsCancel="True" Style="{StaticResource DarkButton}" Margin="0,0,24.714,18.571" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="94"/>
         <Label x:Name="LblText" Content="We could find GPS location data in some of the pictures. Tell us where they were taken and we will add it." HorizontalAlignment="Left" Height="29" Margin="14,47,0,0" VerticalAlignment="Top" Width="548"/>
+        <Label Content="We look for places in:" HorizontalAlignment="Left" Height="29" Margin="10,111,0,0" VerticalAlignment="Top" Width="127"/>
+        <Label Content="{Binding CurrentCountry}" HorizontalAlignment="Left" Height="29" Margin="127,111,0,0" VerticalAlignment="Top" Width="127"/>
     </Grid>
 </Window>

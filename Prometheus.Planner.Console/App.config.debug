@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <appSettings>
+        <add key="prometheusWebServiceUrl" value="http://[UPDATE_WITH_YOUR_SERVICE_URL]"/>
+        <add key="BlogConnectionString" value="[UPDATE_WITH_YOUR_BLOB_STORAGE_ACCOUNT]" />
+        <add key="sendAlertToGroupEndpoint" value="https://[UPDATE_WITH_YOUR_WEBHOOK]/NotifyGroupBySMS?location={0},{1}&amp;group={2}" />
+        <add key="subscribeNumberToGroupAlert" value="https://[UPDATE_WITH_YOUR_WEBHOOK]/SubscribeNumberToGroupAlert?name={0}&amp;phone={1}&amp;group={2}" />
+        <add key="unsubscribeNumberToGroupAlert" value="https://[UPDATE_WITH_YOUR_WEBHOOK]/UnsubscribeFromGroupAlert?id={0}" />
+        <add key="listGroupAlertMembers" value="https://[UPDATE_WITH_YOUR_WEBHOOK]/GroupAlertMembers?group={0"}/>
+        <add key="subscribePartition" value="[UPDATE_WITH_YOUR_RAPID_RESPONSE_TEAM_NAME]" />
+        <add key="fireAlerts_us" value="https://api.weather.gov/alerts/active" />
+        <add key="fireAlerts_ar" value="" />
+        <add key="weatherProviderUrl" value="https://api.openweathermap.org/data/2.5/weather?units=imperial&amp;lat={0}&amp;lon={1}&amp;appid={2}"/>
+        <add key="firmsProviderUrl" value="https://firms.modaps.eosdis.nasa.gov/wms/?REQUEST=GetMap&amp;layers=fires_modis_24&amp;WIDTH=256&amp;HEIGHT=256&amp;BBOX={0}&amp;SRS=EPSG:3857&amp;transparent=true&amp;MAP_KEY=[COMPLETE_WITH_YOUR_MAPKEY]"/>
+        <add key="mslpProviderUrl" value="https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/obs_meteocean_insitu_sfc_time/MapServer/export?bbox={0}&amp;f=image&amp;format=png32&amp;transparent=true&amp;size=256,256&amp;MAP_KEY=[COMPLETE_WITH_YOUR_MAPKEY]"/>
+    </appSettings>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
+    </startup>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-11.0.0.0" newVersion="11.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>

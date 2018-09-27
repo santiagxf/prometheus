@@ -38,6 +38,23 @@
         </Style.Resources>
     </Style>
 
+    <Style x:Key="DarkWindowRed" BasedOn="{StaticResource DarkWindow}" TargetType="Window">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border BorderThickness="4" Background="{StaticResource DarkDeamon}" BorderBrush="DarkRed">
+                        <Grid>
+                            <Rectangle Fill="{DynamicResource TemplationBlueTheme}" HorizontalAlignment="Left" Width="33" />
+                            <AdornerDecorator>
+                                <ContentPresenter/>
+                            </AdornerDecorator>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="BlueDeamonText" TargetType="Label">
         <Setter Property="Foreground" Value="{StaticResource BlueDeamon}" />
         <Setter Property="FontSize" Value="26"/>
@@ -668,12 +685,7 @@ SystemColors.GrayTextBrushKey}}"/>
 
     <ControlTemplate x:Key="FirePushPinTemplate">
         <Grid>
-            <Ellipse Width="32" Height="32" Stroke="Black" StrokeThickness="1" Fill="White" />
-            <Ellipse Width="32" Height="32">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
-                </Ellipse.Fill>
-            </Ellipse>
+            <Image Width="32" Height="41" Source="/Prometheus.Planner.Console;component/Img\FireAlert.png" />
         </Grid>
     </ControlTemplate>
 

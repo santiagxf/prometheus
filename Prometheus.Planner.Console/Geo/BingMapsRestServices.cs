@@ -81,6 +81,11 @@ namespace Prometeo.Planner.Console.Geo
 
         public static bool FindLocationByName(string localition, out double longitud, out double latitude)
         {
+            if (Settings.RED_FLAGS_COUNTRY_CODE == "UNITED STATES")
+                CountryCode = "US";
+            else
+                CountryCode = "AR";
+
             //Get location information from geocode response 
             var xmlDoc = Geocode(localition);
 

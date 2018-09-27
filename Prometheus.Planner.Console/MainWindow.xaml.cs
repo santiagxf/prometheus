@@ -32,6 +32,10 @@ namespace Prometeo.Planner.Console
         // OPTIONS
         public bool RenderRedFlagAlerts { get; set; }
         public bool RenderWeatherConditions { get; set; }
+        public bool RenderFIRMS { get; set; }
+
+        public ApplicationCommand CmdClose { get; set; }
+        public ApplicationCommand CmdMinimize { get; set; }
 
         public ApplicationCommand CmdEndPolygonDrawing { get; set; }
         public ApplicationCommand CmdStartPolygon { get; set; }
@@ -67,7 +71,11 @@ namespace Prometeo.Planner.Console
             DataContext = this;
 
             RenderRedFlagAlerts = true;
+            RenderFIRMS = true;
             RenderWeatherConditions = false;
+
+            CmdClose = new ApplicationCommand((obj)=> Close(), (obj) => true);
+            CmdMinimize = new ApplicationCommand((obj) => WindowState = WindowState.Normal, (obj) => true);
 
             CmdEndPolygonDrawing = new ApplicationCommand(CmdEndPolygonDrawing_Execute);
             CmdStartPolygon = new ApplicationCommand(CmdStartPolygon_Execute);
@@ -162,12 +170,25 @@ namespace Prometeo.Planner.Console
 
         private void CmdConfig_Execute(object obj)
         {
-            (new Settings()).ShowDialog();
+            var oldCountry = Settings.RED_FLAGS_COUNTRY_CODE;
+            (new Settings()
+            {
+                Owner = this
+            }).ShowDialog();
+
+            if (oldCountry != Settings.RED_FLAGS_COUNTRY_CODE)
+            {
+                UpdateRedFlagNotifications(Settings.RED_FLAGS_COUNTRY_CODE);
+                RenderMap();
+            }
         }
 
         private void CmdAlertGroups_Execute(object obj)
         {
-            (new AlertGroup()).ShowDialog();
+            (new AlertGroup()
+            {
+                Owner = this
+            }).ShowDialog();
         }
 
         private void CmdNotificationOpened_Execute(object obj)
@@ -191,7 +212,8 @@ namespace Prometeo.Planner.Console
             {
                 var wdw = new AnalyzeImages()
                 {
-                    FilePath = filePath
+                    FilePath = filePath,
+                    Owner = this
                 };
                 wdw.ShowDialog();
 
@@ -266,8 +288,15 @@ namespace Prometeo.Planner.Console
             if (RenderWeatherConditions)
                 BmpPlanner.Children.Add(new MapTileLayer()
                 {
-                    TileSource = new WMSTileSource(),
-                    Opacity = 0.8
+                    TileSource = new MSLPTileSource(),
+                    Opacity = 1
+                });
+
+            if (RenderFIRMS)
+                BmpPlanner.Children.Add(new MapTileLayer()
+                {
+                    TileSource = new FIRMSTileSource(),
+                    Opacity = 1
                 });
 
             MapLayer labelLayer = new MapLayer();
@@ -435,6 +464,11 @@ namespace Prometeo.Planner.Console
         protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            RenderMap();
         }
     }
 }

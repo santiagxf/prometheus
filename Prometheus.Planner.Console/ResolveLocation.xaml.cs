@@ -27,6 +27,7 @@ namespace Prometeo.Planner.Console
         public ApplicationCommand CmdAccept { get; set; }
         public ApplicationCommand CmdCancel { get; set; }
         public string Location { get; set; }
+        public string CurrentCountry { get; set; }
         public double[] ResolvedLocation { get; set; }
 
         public ResolveLocation()
@@ -34,6 +35,8 @@ namespace Prometeo.Planner.Console
             DataContext = this;
             CmdAccept = new ApplicationCommand(CmdAccept_Execute);
             CmdCancel = new ApplicationCommand(CmdCancel_Execute);
+
+            CurrentCountry = Settings.RED_FLAGS_COUNTRY_CODE;
 
             InitializeComponent();
         }

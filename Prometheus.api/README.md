@@ -7,10 +7,10 @@
 </ul>
 
 <h3>Installation</h3>
-<p>The Prometheus API is provided as a docker container image that contains all the resoruces to run the service. The container starts a Flask web server which listen by default in port 80. All dependencies are automatically installed by the Dockerfile. It is also available in Dockerhub with the tag santiagxf/prometheus.0.9.0<p/>
+<p>The Prometheus API is provided as a docker container image that contains all the resoruces to run the service. The container starts a Flask web server which listen by default in port 80. All dependencies are automatically installed by the Dockerfile.<p/>
 <h3>Components</h3>
 <ol>
-    <li><b>Cognitive ToolKit (CNTK):</b>The docker image contains the Microsoft Data Science Virtual Machine with a Linux distribution with GPU support. GPU can be deativated using configuration files, however is on by default on the given configuration. Follow the steps on https://docs.microsoft.com/en-us/cognitive-toolkit/setup-cntk-on-your-machine to get the image working in a local environment using NVidia dockers.</li>
+    <li><b>Cognitive ToolKit (CNTK):</b>The docker image contains the CNTK Virtual Machine with a Linux distribution with GPU support. GPU can be deativated using configuration files, however is on by default on the given configuration. Follow the steps on https://docs.microsoft.com/en-us/cognitive-toolkit/setup-cntk-on-your-machine to get the image working in a local environment using NVidia dockers.</li>
     <li>
         <p>Special considerations to:
             <ul>

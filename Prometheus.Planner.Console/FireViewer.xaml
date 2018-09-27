@@ -7,8 +7,8 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         mc:Ignorable="d"
         x:Name="UcMainControl"
-        Title="Viewer" WindowStartupLocation="CenterScreen" Width="800" Style="{StaticResource DarkWindow}">
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        Title="Viewer" WindowStartupLocation="CenterScreen" Width="808" Style="{StaticResource DarkWindowRed}">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,10,0">
         <Grid.InputBindings>
             <KeyBinding Key="Esc" Command="{Binding DataContext.CmdClose, ElementName=UcMainControl }" />
         </Grid.InputBindings>
@@ -60,5 +60,19 @@
         <Label Content="OVERALL CONFIDENCE" Style="{StaticResource BlueDeamonTextSmall}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,40.857" />
         <Label Content="{Binding OverallConfidence }" ContentStringFormat="p" Style="{StaticResource BlueDeamonText}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,9.857" />
         <Label Content="FLIGHT TOOLKIT" Style="{StaticResource BlueDeamonTextSmall}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="14,0,0,164.857" />
+        <Label Content="CURRENT WEATHER CONDITIONS HERE" Style="{StaticResource BlueDeamonTextSmall}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="402,0,0,164.857" />
+        <Label Content="TEMPERATURE:" ContentStringFormat="p" Style="{StaticResource DarkDeamonText}" VerticalAlignment="Bottom" Margin="402,0,0,127.857" HorizontalAlignment="Left" />
+        <Label Content="WIND:" ContentStringFormat="p" Style="{StaticResource DarkDeamonText}" VerticalAlignment="Bottom" Margin="402,0,0,94.857" HorizontalAlignment="Left" />
+        <Label Content="SEA-LEVEL PRESSURE:" ContentStringFormat="p" Style="{StaticResource DarkDeamonText}" VerticalAlignment="Bottom" Margin="402,0,0,62.857" HorizontalAlignment="Left" />
+        <Label Foreground="{StaticResource BlueDeamon}" ContentStringFormat="0 °F" Style="{StaticResource BlueDeamonText}" VerticalAlignment="Bottom" Margin="531,0,0,127.857" HorizontalAlignment="Left">
+            <Label.Content>
+                <PriorityBinding>
+                    <Binding Path="WeatherData.main.temp" />
+                    <Binding Source="LOADING WEATHER DATA" />
+                </PriorityBinding>
+            </Label.Content>
+        </Label>
+        <Label Content="{Binding WeatherData.wind.as_string}" Foreground="White" Style="{StaticResource BlueDeamonText}" VerticalAlignment="Bottom" Margin="453,0,0,94.857" HorizontalAlignment="Left" />
+        <Label Content="{Binding WeatherData.main.sea_level}" Foreground="{StaticResource BlueDeamon}" ContentStringFormat="0 hPa" Style="{StaticResource BlueDeamonText}" VerticalAlignment="Bottom" Margin="599,0,0,62.857" HorizontalAlignment="Left" />
     </Grid>
 </Fluent:RibbonWindow>

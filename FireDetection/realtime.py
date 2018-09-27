@@ -36,7 +36,7 @@ eval_model = load_model(os.path.join(workingDir, pretrainnedModelName))
 evaluator = FasterRCNN_Evaluator(eval_model, cfg)
 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while(True):
     # Capture frame-by-frame

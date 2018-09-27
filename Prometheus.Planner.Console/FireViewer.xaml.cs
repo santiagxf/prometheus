@@ -1,4 +1,5 @@
 ﻿using Fluent;
+using Prometeo.Planner.Console.Geo;
 using Prometeo.Planner.Console.Tools;
 using Prometeo.Planner.Console.ViewModel;
 using System;
@@ -46,6 +47,7 @@ namespace Prometeo.Planner.Console
 
         public Thickness CanvasMargin => new Thickness(0, -ImageVPadding,0,0);
         public ImageDetectionResult ImageResults { get; private set; }
+        public CurrentWeatherConditionData WeatherData { get; set; }
         public UserFeedbackAction ActionTaken { get; private set; }
 
         double _longitude, _latitude;
@@ -56,7 +58,7 @@ namespace Prometeo.Planner.Console
             CmdNotifyFire = new ApplicationCommand(CmdNotifyFire_Execute);
             CmdSafeFire = new ApplicationCommand(CmdSafeFire_Execute);
             CmdNotAFire = new ApplicationCommand(CmdNotAFire_Execute);
-            CmdClose = new ApplicationCommand((Action)delegate () { Close(); });
+            CmdClose = new ApplicationCommand((obj) => Close(), (obj) => true );
 
             DataContext = this;
             OverallConfidence = results.scores.Max();
@@ -85,6 +87,14 @@ namespace Prometeo.Planner.Console
             }
 
             renderBoxes(results, false);
+
+            Task.Run(delegate ()
+            {
+               var ws = new OpenWeatherService();
+               WeatherData = ws.QueryConditions(_latitude, _longitude);
+
+               NotifyPropertyChanged("WeatherData");
+            });
 
             NotifyPropertyChanged("CanvasMargin");
         }

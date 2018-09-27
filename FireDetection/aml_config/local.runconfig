@@ -3,6 +3,10 @@
 # by the Workbench application.
 ArgumentVector:
   - "$file"
+  - "roi_min_side_rel"
+  - "0.1"
+  - "0.5"
+  - "0.1"
 
 # The name of the compute target to use for this run.
 Target: "local"
