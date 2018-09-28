@@ -1,5 +1,5 @@
 """
-The flask application package.
+The flask application package. NO CHANGES SHOULD BE MADE HERE
 """
 
 from flask import Flask
