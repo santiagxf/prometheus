@@ -1,5 +1,5 @@
 """
-This script runs the PrometheusWS application using a development server.
+This script runs the PrometheusWS application in a Flask application.
 """
 
 from os import environ

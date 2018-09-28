@@ -1,4 +1,5 @@
 FROM microsoft/cntk:2.5-cpu-python3.5
+# If GPU support intended, change cpu-python3.5 to gpu-python3.5
 
 RUN apt-get update && apt-get install -y --no-install-recommends python-setuptools python-pip libpython3.5-dev
 
