@@ -8,7 +8,7 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:BingMaps="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:Map="clr-namespace:Prometeo.Planner.Console.Map"
-        mc:Ignorable="d" WindowState="Maximized" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" WindowState="Normal" WindowStartupLocation="CenterScreen"
         x:Name="UcMainControl"
         Style="{StaticResource DarkWindow}"
         WindowStyle="SingleBorderWindow"
