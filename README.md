@@ -32,15 +32,15 @@ Prometheus uses Image Detection with computer vision to spot the small fires. By
         <li><b>Serverless functions:</b> Prometheus can send alerts by SMS to people to respond to fires. This functionality is implemented using serverless functions in the cloud along with Twilio automatic SMS capabilities.
         <li><b>Visual Studio: </b>The solution is modeled as a solution in Visual Studio, containing 3 projects: The FireDetection experimentation project - where the DNN was modeled and trained, the Prometheus App - a WPF Windows application and a web API shipped as a docker container - implemented using Flask with Python for scoring.</li>
     </ul>
-    
-    <h3>Weather services</h3>
-    <ul>
-        <li><b>NASA FIRMS Radar:</b> The Fire Information for Resource Management System (FIRMS) distributes Near Real-Time (NRT) active fire data within 3 hours of satellite overpass from both the Moderate Resolution Imaging Spectroradiometer (MODIS) and the Visible Infrared Imaging Radiometer Suite (VIIRS).</li>
-        <li><b>NowCoast NOAA Oceanic Observations:</b> This service is used to provide Mean Sea Level Pressure visualizations in the map. This observations are important as they are not "forecasted". They are real readings from stations deployed all around the world.</li>
-        <li><b>NWS:</b> National Weather Services provides information to undestand and display Red Flag Alerts in the US</li>
-        <li><b>INTA:</b> National Institute of Agricultural Techinology provides information to undestand and display Red Flag Alerts in Argentina.</li>
-    </ul>
 </p>
+
+<h3>Weather services</h3>
+<ul>
+    <li><b>NASA FIRMS Radar:</b> The Fire Information for Resource Management System (FIRMS) distributes Near Real-Time (NRT) active fire data within 3 hours of satellite overpass from both the Moderate Resolution Imaging Spectroradiometer (MODIS) and the Visible Infrared Imaging Radiometer Suite (VIIRS).</li>
+    <li><b>NowCoast NOAA Oceanic Observations:</b> This service is used to provide Mean Sea Level Pressure visualizations in the map. This observations are important as they are not "forecasted". They are real readings from stations deployed all around the world.</li>
+    <li><b>NWS:</b> National Weather Services provides information to undestand and display Red Flag Alerts in the US</li>
+    <li><b>INTA:</b> National Institute of Agricultural Techinology provides information to undestand and display Red Flag Alerts in Argentina.</li>
+</ul>
 
 <h2>
     Instalation instructions
