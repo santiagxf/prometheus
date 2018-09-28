@@ -16,3 +16,9 @@ The file app.config.debug contains the configuration you have to configure in or
         <li>INTA: National Institute of Agricultural Techinology provides information to undestand and display Red Flag Alerts in Argentina.</li>
     </ul>
 </p>
+<h3>App configuration</h3>
+<p style="text-align:center">Other parameters can also configured inside the app:
+<img src="../doc/Configuration.png" alt="Configuration" style="max-width:600px">
+<br />
+<img src="../doc/Subscriptions.png" alt="Subscriptions" style="max-width:500px">
+</p>
