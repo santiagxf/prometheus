@@ -2,6 +2,10 @@
 
 A .NET application is provided with all the features for planning, tracking and analyzing results from flights. Since Prometheus is drone agnostric, we do not provide a way to create a flight plan for auto-piloting. You should use the app shipped by your drone provider. Prometheus Planner console can be used to plan which areas are of interest to create a flight plan, analyze and track the progress. Work is in progress to provide support for flight plan creation using the DroneKit open-source project. However, drone owner may still want to use the one shipped with the drone.
 
+<img src="../doc/app-weather-us.png" alt="app-weather-us" style="max-width:600px">
+<br />
+<img src="../doc/Notifications.png" alt="Notifications" style="max-width:500px">
+
 <h2>Configuration</h2>
 <p>
 The file app.config.debug contains the configuration you have to configure in order to use the app. To use it rename the file to app.config, open the file with Visual Studio and configure all the indicated data. You will have to provide keys and URLs in some cases depending on the specific deployment you are using. We do not provide the app.config file we use in the repository as it will expose access keys or sensitive information.
@@ -20,5 +24,5 @@ The file app.config.debug contains the configuration you have to configure in or
 <p style="text-align:center">Other parameters can also configured inside the app:
 <img src="../doc/Configuration.png" alt="Configuration" style="max-width:600px">
 <br />
-<img src="../doc/Subscriptions.png" alt="Subscriptions" style="max-width:500px">
+<img src="../doc/Subscriptions.jpg" alt="Subscriptions" style="max-width:500px">
 </p>
