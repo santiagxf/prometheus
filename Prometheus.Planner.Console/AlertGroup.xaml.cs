@@ -1,6 +1,4 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Prometeo.Planner.Console.Tools;
 using Prometeo.Planner.Console.ViewModel;
 using Prometeo.Planner.Console.ViewModel.Alerts;
@@ -51,15 +49,12 @@ namespace Prometeo.Planner.Console
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<AlertGroups> blogs = new List<AlertGroups>();
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["BlogConnectionString"]);
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable alertsTable = tableClient.GetTableReference("AlertGroups");
-
             try
             {
-                var query = new TableQuery<AlertGroups>();
-                AllMembers = alertsTable.ExecuteQuery(query).ToList();
+                var partition = ConfigurationManager.AppSettings["subscribePartition"].ToString();
+                var endpoint = ConfigurationManager.AppSettings["listGroupAlertMembers"].ToString();
+                var query = RESTTools.Get(string.Format(endpoint, partition));
+                AllMembers = JsonConvert.DeserializeObject<AlertGroups>(query);
             }
             catch { }
         }
