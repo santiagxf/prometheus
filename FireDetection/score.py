@@ -57,10 +57,6 @@ def init():
         print(str(e))
 
 def main():
-    from azureml.api.schema.dataTypes import DataTypes
-    from azureml.api.schema.sampleDefinition import SampleDefinition
-    from azureml.api.realtime.services import generate_schema
-
     demoimage = os.path.join(os.path.dirname(workingDir), r"./uploadedImg.jpg")
     base64ImgString = imageToBase64(demoimage)
     df = pd.DataFrame(data=[[base64ImgString]], columns=['image base64 string'])

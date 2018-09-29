@@ -8,7 +8,6 @@ detectorName = 'FasterRCNN'
 pretrainnedModelName = r'./PretrainedModels/prometheus.dnn'
 workingDir = os.path.dirname(os.path.abspath(__file__))
 detector_name = 'FasterRCNN'
-azureTuning = true
 
 def get_configuration(detector_name):
     # load configs for detector, base network and data set
@@ -30,10 +29,4 @@ if __name__ == '__main__':
     # write AP results to output
     for class_name in eval_results: print('AP for {:>15} = {:.4f}'.format(class_name, eval_results[class_name]))
     
-    if (azureTuning):
-        from azureml.logging import get_azureml_logger
-        run_logger = get_azureml_logger()
-
-        run_logger.log("MAP", np.nanmean(list(eval_results.values())))
-    else:
-        print('Mean AP = {:.4f}'.format(np.nanmean(list(eval_results.values()))))
+    print('Mean AP = {:.4f}'.format(np.nanmean(list(eval_results.values()))))

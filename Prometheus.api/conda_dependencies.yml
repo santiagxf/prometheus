@@ -11,14 +11,11 @@
 
 # For managing Spark packages and configuration, see spark_dependencies.yml.
 
-# Version of this configuration file's structure and semantics in AzureML.
 # This directive is stored in a comment to preserve the Conda file structure.
-# [AzureMlVersion] = 2
 
 name: project_environment
 dependencies:
   # The python interpreter version.
-  # Currently Azure ML Workbench only supports 3.5.2.
   - python=3.5.2
   # Required for Jupyter Notebooks.
 
